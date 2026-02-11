@@ -62,10 +62,11 @@ export default function Home() {
         async function testDiscogs() {
             try {
                 const token = import.meta.env.VITE_DISCOGS_TOKEN;
-                const query = "I Will Always Love You";
-                const chosenArtist = "Whitney Houston";
-                const results = await searchReleases(query, token, { perPage: 20, page: 1 });
-                const mapped = results.map((r) => ({
+                const query = "Hurt";
+                const chosenArtist = "Johnny Cash";
+                const baseResults = await searchReleases(query, token, { perPage: 20, page: 1 });
+                let results = baseResults;
+                let mapped = results.map((r) => ({
                     id: r.id,
                     title: r.title,
                     year: r.year,
@@ -73,23 +74,62 @@ export default function Home() {
                 }));
                 console.table(mapped);
 
-                const chosenCandidate = results.find((r) =>
+                let chosenCandidate = results.find((r) =>
                     normalize(r.title).includes(normalize(chosenArtist))
                 );
 
                 if (!chosenCandidate) {
-                    console.warn("Missing chosen artist candidate in first page");
-                    return;
+                    const fallbackQuery = `${query} ${chosenArtist}`;
+                    results = await searchReleases(fallbackQuery, token, {
+                        perPage: 20,
+                        page: 1,
+                    });
+                    mapped = results.map((r) => ({
+                        id: r.id,
+                        title: r.title,
+                        year: r.year,
+                        masterId: r.master_id ?? null,
+                    }));
+                    console.table(mapped);
+
+                    const fallbackCandidate = results.find((r) =>
+                        normalize(r.title).includes(normalize(chosenArtist))
+                    );
+
+                    if (!fallbackCandidate) {
+                        console.warn("Missing chosen artist candidate in first page");
+                        return;
+                    }
+
+                    chosenCandidate = fallbackCandidate;
                 }
 
                 const chosenRelease = await getRelease(chosenCandidate.id, token);
-                const chosenInfo = extractTrackWriters(chosenRelease, query);
-                const chosenWriters = chosenInfo.writers;
+                let chosenReleaseToCompare = chosenRelease;
+                let chosenInfo = extractTrackWriters(chosenReleaseToCompare, query);
+                let chosenWriters = chosenInfo.writers;
+                let chosenYear = chosenReleaseToCompare.year ?? null;
+
+                const chosenResults = results
+                    .filter((r) => normalize(r.title).includes(normalize(chosenArtist)))
+                    .filter((r) => r.year)
+                    .sort((a, b) => a.year - b.year);
+
+                if (chosenResults.length > 0) {
+                    const oldestChosen = chosenResults[0];
+                    if (oldestChosen.id !== chosenReleaseToCompare.id) {
+                        const oldestRelease = await getRelease(oldestChosen.id, token);
+                        chosenReleaseToCompare = oldestRelease;
+                        chosenInfo = extractTrackWriters(chosenReleaseToCompare, query);
+                        chosenWriters = chosenInfo.writers;
+                        chosenYear = chosenReleaseToCompare.year ?? null;
+                    }
+                }
 
                 console.log("Chosen release", {
-                    id: chosenRelease.id,
-                    title: chosenRelease.title,
-                    year: chosenRelease.year ?? null,
+                    id: chosenReleaseToCompare.id,
+                    title: chosenReleaseToCompare.title,
+                    year: chosenYear,
                     matchedTrack: chosenInfo.trackTitle,
                     writers: Array.from(chosenWriters),
                 });
@@ -124,14 +164,13 @@ export default function Home() {
                 }
 
                 let verdict = "unknown";
-                const chosenYear = chosenRelease.year ?? null;
                 if (earliestMatch?.year && chosenYear) {
                     verdict = earliestMatch.year < chosenYear ? "not original" : "unknown";
                 } else if (earliestMatch?.year && !chosenYear) {
                     verdict = "not original";
                 }
 
-                console.log("Verdict for Whitney Houston version:", verdict);
+                console.log(`Verdict for ${chosenArtist} version:`, verdict);
             } catch (error) {
                 console.error("Discogs error: ", error);
             }
