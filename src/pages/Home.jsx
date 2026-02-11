@@ -52,10 +52,18 @@ export default function Home() {
             return { writers, trackTitle: track?.title ?? null };
         }
 
+        function hasSharedWriter(a, b) {
+            for (const w of a) {
+                if (b.has(w)) return true;
+            }
+            return false;
+        }
+
         async function testDiscogs() {
             try {
                 const token = import.meta.env.VITE_DISCOGS_TOKEN;
-                const query = "Hallelujah";
+                const query = "I Will Always Love You";
+                const chosenArtist = "Whitney Houston";
                 const results = await searchReleases(query, token, { perPage: 20, page: 1 });
                 const mapped = results.map((r) => ({
                     id: r.id,
@@ -65,56 +73,65 @@ export default function Home() {
                 }));
                 console.table(mapped);
 
-                const lcCandidate = results.find((r) =>
-                    normalize(r.title).includes("leonard cohen")
-                );
-                const jbCandidate = results.find((r) =>
-                    normalize(r.title).includes("jeff buckley")
+                const chosenCandidate = results.find((r) =>
+                    normalize(r.title).includes(normalize(chosenArtist))
                 );
 
-                if (!lcCandidate || !jbCandidate) {
-                    console.warn("Missing Leonard Cohen or Jeff Buckley candidate in first page");
+                if (!chosenCandidate) {
+                    console.warn("Missing chosen artist candidate in first page");
                     return;
                 }
 
-                const [lcRelease, jbRelease] = await Promise.all([
-                    getRelease(lcCandidate.id, token),
-                    getRelease(jbCandidate.id, token),
-                ]);
+                const chosenRelease = await getRelease(chosenCandidate.id, token);
+                const chosenInfo = extractTrackWriters(chosenRelease, query);
+                const chosenWriters = chosenInfo.writers;
 
-                const lcInfo = extractTrackWriters(lcRelease, query);
-                const jbInfo = extractTrackWriters(jbRelease, query);
-
-                const lcWriters = Array.from(lcInfo.writers);
-                const jbWriters = Array.from(jbInfo.writers);
-
-                console.log("Leonard Cohen release", {
-                    id: lcRelease.id,
-                    title: lcRelease.title,
-                    year: lcRelease.year ?? null,
-                    matchedTrack: lcInfo.trackTitle,
-                    writers: lcWriters,
-                });
-                console.log("Jeff Buckley release", {
-                    id: jbRelease.id,
-                    title: jbRelease.title,
-                    year: jbRelease.year ?? null,
-                    matchedTrack: jbInfo.trackTitle,
-                    writers: jbWriters,
+                console.log("Chosen release", {
+                    id: chosenRelease.id,
+                    title: chosenRelease.title,
+                    year: chosenRelease.year ?? null,
+                    matchedTrack: chosenInfo.trackTitle,
+                    writers: Array.from(chosenWriters),
                 });
 
-                const jbHasCohenWriter = jbWriters.some((w) => w.includes("leonard cohen"));
-                const lcYear = lcRelease.year ?? null;
-                const jbYear = jbRelease.year ?? null;
+                const comparisonCandidates = results
+                    .filter((r) => !normalize(r.title).includes(normalize(chosenArtist)))
+                    .slice(0, 5);
+
+                const comparisonReleases = await Promise.all(
+                    comparisonCandidates.map((r) => getRelease(r.id, token))
+                );
+
+                let earliestMatch = null;
+                for (const release of comparisonReleases) {
+                    const info = extractTrackWriters(release, query);
+                    if (!hasSharedWriter(chosenWriters, info.writers)) continue;
+                    const year = release.year ?? null;
+                    if (year && (!earliestMatch || year < earliestMatch.year)) {
+                        earliestMatch = {
+                            id: release.id,
+                            title: release.title,
+                            year,
+                            matchedTrack: info.trackTitle,
+                        };
+                    }
+                }
+
+                if (earliestMatch) {
+                    console.log("Earliest matching release", earliestMatch);
+                } else {
+                    console.log("No earlier matching release found in sampled candidates");
+                }
 
                 let verdict = "unknown";
-                if (jbHasCohenWriter && lcYear && jbYear) {
-                    verdict = lcYear <= jbYear ? "not original" : "unknown";
-                } else if (jbHasCohenWriter && lcYear && !jbYear) {
+                const chosenYear = chosenRelease.year ?? null;
+                if (earliestMatch?.year && chosenYear) {
+                    verdict = earliestMatch.year < chosenYear ? "not original" : "unknown";
+                } else if (earliestMatch?.year && !chosenYear) {
                     verdict = "not original";
                 }
 
-                console.log("Verdict for Jeff Buckley version:", verdict);
+                console.log("Verdict for Whitney Houston version:", verdict);
             } catch (error) {
                 console.error("Discogs error: ", error);
             }
