@@ -7,6 +7,8 @@ import Login from "../pages/Login.jsx";
 import History from "../pages/History.jsx";
 import Profile from "../pages/Profile.jsx";
 import NotFound from "../pages/NotFound.jsx";
+import ProtectedRoute from "../routes/ProtectedRoute.jsx";
+import PublicOnlyRoute from "../routes/PublicOnlyRoute.jsx";
 
 
 function App() {
@@ -14,9 +16,14 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="login" element={<Login />} />
-                <Route path="favorites" element={<Favorites />} />
+                <Route element={<PublicOnlyRoute />}>
+                    <Route path="login" element={<Login />} />
+                </Route>
+                <Route element={<ProtectedRoute />}>
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="favorites" element={<Favorites />} />
+                    <Route path="history" element={<History />} />
+                </Route>
                 <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
