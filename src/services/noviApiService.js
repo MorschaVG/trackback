@@ -13,6 +13,15 @@ export async function loginUser({ email, password }) {
     return response.data;
 }
 
+export async function registerUser({ email, password }) {
+    const response = await noviClient.post("/users", {
+        email,
+        password,
+        roles: ["user"],
+    });
+    return response.data;
+}
+
 export async function getFavoritesByUser(userId, token) {
     const response = await noviClient.get("/favorites", {
         ...withAuth(token),
@@ -35,3 +44,12 @@ export async function getHistoryByUser(userId, token) {
     return response.data;
 }
 
+export async function createFavorite(payload, token) {
+    const response = await noviClient.post("/favorites", payload, withAuth(token));
+    return response.data;
+}
+
+export async function createHistoryEntry(payload, token) {
+    const response = await noviClient.post("/history", payload, withAuth(token));
+    return response.data;
+}

@@ -6,7 +6,15 @@ function formatArtists(artists) {
 }
 
 // Displays the verdict and original attribution when applicable.
-export default function VerdictSection({ verdict, originalInfo, searchedSong }) {
+export default function VerdictSection({
+    verdict,
+    originalInfo,
+    searchedSong,
+    canSaveFavorite,
+    onSaveFavorite,
+    isSavingFavorite,
+    favoriteSaveMessage,
+}) {
     if (!verdict || !searchedSong) return null;
 
     const originalArtistText = formatArtists(originalInfo?.artists) || "Unknown";
@@ -34,6 +42,19 @@ export default function VerdictSection({ verdict, originalInfo, searchedSong }) 
                         year={originalYear}
                     />
                 </>
+            ) : null}
+            {canSaveFavorite ? (
+                <div style={{ marginTop: 12 }}>
+                    <button
+                        type="button"
+                        onClick={onSaveFavorite}
+                        disabled={isSavingFavorite}
+                        className="home-button"
+                    >
+                        {isSavingFavorite ? "Saving..." : "Save to favorites"}
+                    </button>
+                    {favoriteSaveMessage ? <p>{favoriteSaveMessage}</p> : null}
+                </div>
             ) : null}
         </div>
     );

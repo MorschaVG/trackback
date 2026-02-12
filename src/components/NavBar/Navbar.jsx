@@ -38,7 +38,10 @@ export default function NavBar() {
                     </span>
                 </>
             ) : (
-                <NavLink to="/login" style={linkStyle}>Login</NavLink>
+                <>
+                    <NavLink to="/login" style={linkStyle}>Login</NavLink>
+                    <NavLink to="/register" style={linkStyle}>Register</NavLink>
+                </>
             )}
         </nav>
     );
