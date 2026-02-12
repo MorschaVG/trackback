@@ -1,0 +1,10 @@
+/* Home-specific button borders that flip with color scheme. */
+.home-button {
+  border-color: #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  .home-button {
+    border-color: #000000;
+  }
+}
