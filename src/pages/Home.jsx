@@ -4,6 +4,7 @@ import VerdictSection from "../components/Home/VerdictSection";
 import VersionsPrompt from "../components/Home/VersionsPrompt";
 import VersionsList from "../components/Home/VersionsList";
 import "./Home.css";
+import { useAuth } from "../context/AuthContext.jsx";
 import {
     normalize,
     findBestWorkByTitle,
@@ -12,8 +13,18 @@ import {
     findRecordingByArtistAndTitle,
     fetchOtherArtistsByWork,
 } from "../helpers/musicbrainz";
+import { createFavorite, createHistoryEntry } from "../services/noviApiService.js";
+
+function toYearNumber(value) {
+    if (value === null || value === undefined || value === "") return undefined;
+    if (typeof value === "number") return value;
+    const text = String(value);
+    const match = text.match(/\d{4}/);
+    return match ? Number(match[0]) : undefined;
+}
 
 export default function Home() {
+    const { isAuthenticated, token, user } = useAuth();
     // Form input and request state.
     const [songTitle, setSongTitle] = useState("");
     const [artistName, setArtistName] = useState("");
@@ -26,6 +37,50 @@ export default function Home() {
     const [showVersions, setShowVersions] = useState(false);
     const [isLoadingVersions, setIsLoadingVersions] = useState(false);
     const [excludeLiveOrRemix, setExcludeLiveOrRemix] = useState(false);
+    const [lastSearchSnapshot, setLastSearchSnapshot] = useState(null);
+    const [isSavingFavorite, setIsSavingFavorite] = useState(false);
+    const [favoriteSaveMessage, setFavoriteSaveMessage] = useState("");
+
+    async function storeHistory(snapshot) {
+        if (!isAuthenticated || !token || !user?.userId) return;
+        try {
+            await createHistoryEntry(
+                {
+                    userId: user.userId,
+                    title: snapshot.title,
+                    artist: snapshot.artist,
+                    year: snapshot.year,
+                    verdict: snapshot.verdict,
+                },
+                token
+            );
+        } catch (error) {
+            console.error("Failed to store history:", error);
+        }
+    }
+
+    async function saveCurrentAsFavorite() {
+        if (!lastSearchSnapshot || !isAuthenticated || !token || !user?.userId) return;
+        setIsSavingFavorite(true);
+        setFavoriteSaveMessage("");
+        try {
+            await createFavorite(
+                {
+                    userId: user.userId,
+                    title: lastSearchSnapshot.title,
+                    artist: lastSearchSnapshot.artist,
+                    year: lastSearchSnapshot.year,
+                    verdict: lastSearchSnapshot.verdict,
+                },
+                token
+            );
+            setFavoriteSaveMessage("Saved to favorites.");
+        } catch {
+            setFavoriteSaveMessage("Could not save favorite.");
+        } finally {
+            setIsSavingFavorite(false);
+        }
+    }
 
     async function checkOriginal() {
         // Guard against empty input or concurrent searches.
@@ -37,8 +92,10 @@ export default function Home() {
         setOtherVersions([]);
         setShowVersions(false);
         setShowVersionsPrompt(false);
+        setFavoriteSaveMessage("");
         const trimmedTitle = songTitle.trim();
         const trimmedArtist = artistName.trim();
+        let searchedYearRaw = "";
         setSearchedSong({
             artist: trimmedArtist,
             title: trimmedTitle,
@@ -50,10 +107,11 @@ export default function Home() {
                 findRecordingByArtistAndTitle(trimmedTitle, trimmedArtist),
             ]);
             if (artistRecording?.date) {
+                searchedYearRaw = artistRecording.date;
                 setSearchedSong({
                     artist: trimmedArtist,
                     title: trimmedTitle,
-                    year: artistRecording.date,
+                    year: searchedYearRaw,
                 });
             }
             // Prefer work credits, fall back to earliest recording.
@@ -62,6 +120,14 @@ export default function Home() {
                 (await findOriginalRecording(trimmedTitle));
             if (!original) {
                 setVerdict("unknown");
+                const unknownSnapshot = {
+                    title: trimmedTitle,
+                    artist: trimmedArtist,
+                    year: toYearNumber(searchedYearRaw),
+                    verdict: "unknown",
+                };
+                setLastSearchSnapshot(unknownSnapshot);
+                await storeHistory(unknownSnapshot);
                 return;
             }
 
@@ -75,6 +141,17 @@ export default function Home() {
             const nextVerdict = matchesOriginal ? "original" : "not original";
 
             setVerdict(nextVerdict);
+            const resolvedYear = matchesOriginal
+                ? toYearNumber(original.date || searchedYearRaw)
+                : toYearNumber(searchedYearRaw);
+            const snapshot = {
+                title: trimmedTitle,
+                artist: trimmedArtist,
+                year: resolvedYear,
+                verdict: nextVerdict,
+            };
+            setLastSearchSnapshot(snapshot);
+            await storeHistory(snapshot);
 
             if (bestWork?.id) {
                 // When a work exists, load other versions.
@@ -135,6 +212,10 @@ export default function Home() {
                 verdict={verdict}
                 originalInfo={originalInfo}
                 searchedSong={searchedSong}
+                canSaveFavorite={Boolean(isAuthenticated && lastSearchSnapshot)}
+                onSaveFavorite={saveCurrentAsFavorite}
+                isSavingFavorite={isSavingFavorite}
+                favoriteSaveMessage={favoriteSaveMessage}
             />
             <VersionsPrompt
                 show={showVersionsPrompt}
