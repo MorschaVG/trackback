@@ -1,13 +1,15 @@
+import SongCard from "../SongCard/SongCard";
+
 // List of other artists plus toggle for live/remix inclusion.
 export default function VersionsList({
     show,
-    otherArtists,
+    otherVersions,
     excludeLiveOrRemix,
     onToggleExclude,
     isRunning,
     isLoadingVersions,
 }) {
-    if (!show || otherArtists.length === 0) return null;
+    if (!show || otherVersions.length === 0) return null;
 
     return (
         <div>
@@ -20,9 +22,15 @@ export default function VersionsList({
             >
                 {excludeLiveOrRemix ? "Include live/remix" : "Exclude live/remix"}
             </button>
-            <ul>
-                {otherArtists.map((artist) => (
-                    <li key={artist}>{artist}</li>
+            <ul className="versions-list">
+                {otherVersions.map((version) => (
+                    <li key={version.id || `${version.artist}-${version.title}`}>
+                        <SongCard
+                            artist={version.artist}
+                            title={version.title}
+                            year={version.date}
+                        />
+                    </li>
                 ))}
             </ul>
         </div>

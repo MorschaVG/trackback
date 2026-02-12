@@ -3,6 +3,12 @@
   border-color: #ffffff;
 }
 
+.versions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 @media (prefers-color-scheme: light) {
   .home-button {
     border-color: #000000;

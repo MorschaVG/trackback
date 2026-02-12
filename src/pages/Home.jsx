@@ -9,6 +9,7 @@ import {
     findBestWorkByTitle,
     findOriginalByWork,
     findOriginalRecording,
+    findRecordingByArtistAndTitle,
     fetchOtherArtistsByWork,
 } from "../helpers/musicbrainz";
 
@@ -16,10 +17,11 @@ export default function Home() {
     // Form input and request state.
     const [songTitle, setSongTitle] = useState("");
     const [artistName, setArtistName] = useState("");
+    const [searchedSong, setSearchedSong] = useState(null);
     const [isRunning, setIsRunning] = useState(false);
     const [verdict, setVerdict] = useState("");
     const [originalInfo, setOriginalInfo] = useState(null);
-    const [otherArtists, setOtherArtists] = useState([]);
+    const [otherVersions, setOtherVersions] = useState([]);
     const [showVersionsPrompt, setShowVersionsPrompt] = useState(false);
     const [showVersions, setShowVersions] = useState(false);
     const [isLoadingVersions, setIsLoadingVersions] = useState(false);
@@ -32,12 +34,28 @@ export default function Home() {
         // Reset UI for a fresh lookup.
         setVerdict("");
         setOriginalInfo(null);
-        setOtherArtists([]);
+        setOtherVersions([]);
         setShowVersions(false);
         setShowVersionsPrompt(false);
+        const trimmedTitle = songTitle.trim();
+        const trimmedArtist = artistName.trim();
+        setSearchedSong({
+            artist: trimmedArtist,
+            title: trimmedTitle,
+            year: "",
+        });
         try {
-            const trimmedTitle = songTitle.trim();
-            const bestWork = await findBestWorkByTitle(trimmedTitle);
+            const [bestWork, artistRecording] = await Promise.all([
+                findBestWorkByTitle(trimmedTitle),
+                findRecordingByArtistAndTitle(trimmedTitle, trimmedArtist),
+            ]);
+            if (artistRecording?.date) {
+                setSearchedSong({
+                    artist: trimmedArtist,
+                    title: trimmedTitle,
+                    year: artistRecording.date,
+                });
+            }
             // Prefer work credits, fall back to earliest recording.
             const original =
                 (bestWork ? await findOriginalByWork(bestWork) : null) ||
@@ -70,7 +88,7 @@ export default function Home() {
                     excluded,
                     excludeLiveOrRemix
                 );
-                setOtherArtists(artists);
+                setOtherVersions(artists);
                 setShowVersionsPrompt(artists.length > 0);
             }
         } catch (error) {
@@ -97,7 +115,7 @@ export default function Home() {
             excluded,
             nextExcludeLiveOrRemix
         );
-        setOtherArtists(artists);
+        setOtherVersions(artists);
         setShowVersionsPrompt(artists.length > 0);
         setIsLoadingVersions(false);
     }
@@ -113,7 +131,11 @@ export default function Home() {
                 onSearch={checkOriginal}
                 isRunning={isRunning}
             />
-            <VerdictSection verdict={verdict} originalInfo={originalInfo} />
+            <VerdictSection
+                verdict={verdict}
+                originalInfo={originalInfo}
+                searchedSong={searchedSong}
+            />
             <VersionsPrompt
                 show={showVersionsPrompt}
                 showVersions={showVersions}
@@ -122,7 +144,7 @@ export default function Home() {
             {isLoadingVersions ? <p>Checking for other versions...</p> : null}
             <VersionsList
                 show={showVersions}
-                otherArtists={otherArtists}
+                otherVersions={otherVersions}
                 excludeLiveOrRemix={excludeLiveOrRemix}
                 onToggleExclude={() => {
                     setExcludeLiveOrRemix((value) => {
