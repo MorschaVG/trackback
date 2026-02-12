@@ -1,8 +1,21 @@
+/*
+MusicBrainz helper utilities for search and normalization.
+Terms:
+        -WORK: A 'work' in MusicBrainz context means an original composition or intellectual artistic creation
+        -RELEASE: A release in MusicBrainz context means a unique product containing at least one audio medium
+         (disc, cassette, vinyl)
+        -RECORDING: A recording represents a distinct audio performance that can be linked to one or more tracks
+          on releases; each track is associated with exactly one recording, and the recording reflects the specific
+          mixed audio before final mastering.
+*/
+
 const MB_HEADERS = {
+    // Required by MusicBrainz for responsible API usage.
     "User-Agent": "Trackback/0.1 (contact@example.com)",
 };
 
 export function normalize(text) {
+    // Normalize input for consistent comparisons.
     return (text || "")
         .toLowerCase()
         .replace(/\s+/g, " ")
@@ -11,6 +24,7 @@ export function normalize(text) {
 }
 
 export function normalizeTrackTitle(title) {
+    // Strip common extras to improve matching across releases.
     return normalize(title)
         .replace(/\s+\(.*\)$/g, "")
         .replace(/\s*(feat\.|featuring|ft\.|with)\s+.+$/g, "")
@@ -20,6 +34,7 @@ export function normalizeTrackTitle(title) {
 }
 
 function getArtistCreditName(artistCredit) {
+    // Stitch together credit fragments with join phrases ('featuring', '&') intact.
     if (!Array.isArray(artistCredit)) return "";
     return artistCredit
         .map((credit) => {
@@ -32,6 +47,7 @@ function getArtistCreditName(artistCredit) {
 }
 
 function extractWorkArtists(work) {
+    // Prefer composer/lyricist credits for the work author.
     const rels = Array.isArray(work?.relations) ? work.relations : [];
     const writers = rels
         .filter((rel) => rel.type === "composer" || rel.type === "lyricist")
@@ -41,6 +57,7 @@ function extractWorkArtists(work) {
 }
 
 function isLiveOrRemix(recording) {
+    // Exclude live/remix versions.
     const title = recording?.title || "";
     const disambiguation = recording?.disambiguation || "";
     const text = `${title} ${disambiguation}`.toLowerCase();
@@ -48,17 +65,20 @@ function isLiveOrRemix(recording) {
 }
 
 async function fetchJson(url) {
+    // Fetch wrapper with MB headers.
     const response = await fetch(url, { headers: MB_HEADERS });
     if (!response.ok) return null;
     return response.json();
 }
 
 async function fetchWorkById(id) {
+    // Fetch work data with artist relationships.
     const url = `https://musicbrainz.org/ws/2/work/${id}?inc=artist-rels&fmt=json`;
     return fetchJson(url);
 }
 
 export async function findBestWorkByTitle(title) {
+    // Search for the most relevant work by normalized title.
     const queryTitle = normalizeTrackTitle(title);
     const mbQuery = `work:"${queryTitle}"`;
     const url = `https://musicbrainz.org/ws/2/work/?query=${encodeURIComponent(
@@ -78,6 +98,7 @@ export async function findBestWorkByTitle(title) {
 }
 
 export async function findOriginalByWork(bestWork) {
+    // Resolve original artist credits from a matched work.
     if (!bestWork?.id) return null;
 
     const fullWork = await fetchWorkById(bestWork.id);
@@ -93,6 +114,7 @@ export async function findOriginalByWork(bestWork) {
 }
 
 export async function findOriginalRecording(title) {
+    // Fallback path: earliest recording with a matching title.
     const queryTitle = normalizeTrackTitle(title);
     const mbQuery = `recording:"${queryTitle}"`;
     const url = `https://musicbrainz.org/ws/2/recording/?query=${encodeURIComponent(
@@ -133,6 +155,7 @@ export async function fetchOtherArtistsByWork(
     excludedNormalized,
     excludeLiveRemix
 ) {
+    // List other artist credits for recordings tied to the same work.
     const url = `https://musicbrainz.org/ws/2/recording?work=${encodeURIComponent(
         workId
     )}&inc=artist-credits&fmt=json&limit=100`;

@@ -1,3 +1,4 @@
+// Form for entering song/artist and triggering a search.
 export default function SearchForm({
     songTitle,
     artistName,

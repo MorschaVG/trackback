@@ -1,3 +1,4 @@
+// Prompt to reveal or hide other versions.
 export default function VersionsPrompt({ show, showVersions, onToggle }) {
     if (!show) return null;
 

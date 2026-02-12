@@ -1,3 +1,4 @@
+// List of other artists plus toggle for live/remix inclusion.
 export default function VersionsList({
     show,
     otherArtists,

@@ -1,3 +1,4 @@
+// Displays the verdict and original attribution when applicable.
 export default function VerdictSection({ verdict, originalInfo }) {
     if (!verdict) return null;
 

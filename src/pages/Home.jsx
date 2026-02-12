@@ -13,6 +13,7 @@ import {
 } from "../helpers/musicbrainz";
 
 export default function Home() {
+    // Form input and request state.
     const [songTitle, setSongTitle] = useState("");
     const [artistName, setArtistName] = useState("");
     const [isRunning, setIsRunning] = useState(false);
@@ -25,8 +26,10 @@ export default function Home() {
     const [excludeLiveOrRemix, setExcludeLiveOrRemix] = useState(false);
 
     async function checkOriginal() {
+        // Guard against empty input or concurrent searches.
         if (!songTitle.trim() || !artistName.trim() || isRunning) return;
         setIsRunning(true);
+        // Reset UI for a fresh lookup.
         setVerdict("");
         setOriginalInfo(null);
         setOtherArtists([]);
@@ -35,6 +38,7 @@ export default function Home() {
         try {
             const trimmedTitle = songTitle.trim();
             const bestWork = await findBestWorkByTitle(trimmedTitle);
+            // Prefer work credits, fall back to earliest recording.
             const original =
                 (bestWork ? await findOriginalByWork(bestWork) : null) ||
                 (await findOriginalRecording(trimmedTitle));
@@ -46,6 +50,7 @@ export default function Home() {
             setOriginalInfo(original);
             const chosenNormalized = normalize(artistName);
             const originalArtists = original.artists || [];
+            // Compare normalized artist names for the verdict.
             const matchesOriginal = originalArtists.some(
                 (artist) => normalize(artist) === chosenNormalized
             );
@@ -54,6 +59,7 @@ export default function Home() {
             setVerdict(nextVerdict);
 
             if (bestWork?.id) {
+                // When a work exists, load other versions.
                 setIsLoadingVersions(true);
                 const excluded = new Set([normalize(artistName)]);
                 if (nextVerdict === "not original") {
@@ -76,6 +82,7 @@ export default function Home() {
     }
 
     async function refreshOtherArtists(nextExcludeLiveOrRemix = excludeLiveOrRemix) {
+        // Refresh list when toggling live/remix exclusion.
         const bestWork = await findBestWorkByTitle(songTitle.trim());
         if (!bestWork?.id) return;
         setIsLoadingVersions(true);
