@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import { PillboxInput } from "../components/Pillbox/Pillbox.jsx";
+import "./AuthPages.css";
 
 export default function Login() {
     const { login } = useAuth();
@@ -25,31 +27,36 @@ export default function Login() {
     }
 
     return (
-        <section style={{ maxWidth: 420 }}>
+        <section className="auth-page">
             <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email</label>
-                <input
+            <form onSubmit={handleSubmit} className="auth-form">
+                <label htmlFor="email" className="auth-label">Email</label>
+                <PillboxInput
                     id="email"
                     type="email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
-                    style={{ display: "block", marginBottom: 12, width: "100%" }}
+                    className="auth-input"
                 />
-                <label htmlFor="password">Password</label>
-                <input
+                <label htmlFor="password" className="auth-label">Password</label>
+                <PillboxInput
                     id="password"
                     type="password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     required
-                    style={{ display: "block", marginBottom: 12, width: "100%" }}
+                    className="auth-input"
                 />
+                <p className="auth-helper">
+                    Nog geen account?
+                    <br />
+                    klik <Link to="/register" className="auth-helper-link">hier</Link>
+                </p>
                 <button type="submit" disabled={isSubmitting}>
                     {isSubmitting ? "Logging in..." : "Login"}
                 </button>
-                {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
+                {error ? <p className="auth-error">{error}</p> : null}
             </form>
         </section>
     );

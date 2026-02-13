@@ -236,14 +236,18 @@ export default function Home() {
     return (
         <div>
             <h1>Home</h1>
-            <SearchForm
-                songTitle={songTitle}
-                artistName={artistName}
-                onSongTitleChange={(event) => setSongTitle(event.target.value)}
-                onArtistNameChange={(event) => setArtistName(event.target.value)}
-                onSearch={checkOriginal}
-                isRunning={isRunning}
-            />
+            {isAuthenticated ? (
+                <SearchForm
+                    songTitle={songTitle}
+                    artistName={artistName}
+                    onSongTitleChange={(event) => setSongTitle(event.target.value)}
+                    onArtistNameChange={(event) => setArtistName(event.target.value)}
+                    onSearch={checkOriginal}
+                    isRunning={isRunning}
+                />
+            ) : (
+                <p>Log in om te zoeken naar songs.</p>
+            )}
             <VerdictSection
                 verdict={verdict}
                 originalInfo={originalInfo}
