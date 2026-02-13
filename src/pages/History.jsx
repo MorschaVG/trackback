@@ -3,9 +3,12 @@ import { useHistory } from "../hooks/useHistory.js";
 import { deleteHistoryById } from "../services/noviApiService.js";
 import { useEffect, useState } from "react";
 import { formatUtcRfc2822NoSecondsNoZone } from "../helpers/formatDate.js";
+import SongCard from "../components/SongCard/SongCard.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function History() {
     const { user, token } = useAuth();
+    const navigate = useNavigate();
     const { history, isLoading, error } = useHistory(user?.userId, token);
     const [items, setItems] = useState([]);
     const [isClearing, setIsClearing] = useState(false);
@@ -29,6 +32,18 @@ export default function History() {
         }
     }
 
+    function handleReplaySearch(item) {
+        navigate("/", {
+            state: {
+                replaySearch: {
+                    title: item.title,
+                    artist: item.artist,
+                    requestId: `${Date.now()}-${item.id}`,
+                },
+            },
+        });
+    }
+
     return (
         <section>
             <h1>History</h1>
@@ -45,15 +60,18 @@ export default function History() {
             {!isLoading && !error && items.length === 0 ? (
                 <p>No history yet.</p>
             ) : null}
-            <ul>
+            <ul className="song-card-list">
                 {items.map((item) => (
                     <li key={item.id}>
-                        {item.artist} - {item.title}
-                        {item.year ? ` (${item.year})` : ""}
-                        {" | "}
-                        {item.verdict}
-                        {" | "}
-                        {formatUtcRfc2822NoSecondsNoZone(item.timestamp)}
+                        <SongCard
+                            artist={item.artist}
+                            title={item.title}
+                            year={item.year}
+                            verdict={item.verdict}
+                            timestamp={formatUtcRfc2822NoSecondsNoZone(item.timestamp)}
+                            onSelect={() => handleReplaySearch(item)}
+                            selectLabel={`Replay search for ${item.title} by ${item.artist}`}
+                        />
                     </li>
                 ))}
             </ul>

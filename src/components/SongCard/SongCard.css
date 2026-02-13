@@ -10,6 +10,18 @@
   gap: 0.2rem;
 }
 
+.song-card__select {
+  all: unset;
+  display: block;
+  cursor: pointer;
+}
+
+.song-card__select:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
 .song-card__artist {
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -22,6 +34,21 @@
 .song-card__year {
   opacity: 0.8;
   font-size: 0.95rem;
+}
+
+.song-card__meta {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.song-card__actions {
+  margin-top: 0.45rem;
+}
+
+.song-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 @media (prefers-color-scheme: light) {

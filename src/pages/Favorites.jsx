@@ -3,9 +3,12 @@ import { useFavorites } from "../hooks/useFavorites.js";
 import { deleteFavoriteById } from "../services/noviApiService.js";
 import { useEffect, useState } from "react";
 import { formatUtcRfc2822NoSecondsNoZone } from "../helpers/formatDate.js";
+import SongCard from "../components/SongCard/SongCard.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Favorites() {
     const { user, token } = useAuth();
+    const navigate = useNavigate();
     const { favorites, isLoading, error } = useFavorites(user?.userId, token);
     const [items, setItems] = useState([]);
     const [pendingDeleteId, setPendingDeleteId] = useState(null);
@@ -28,6 +31,18 @@ export default function Favorites() {
         }
     }
 
+    function handleReplaySearch(item) {
+        navigate("/", {
+            state: {
+                replaySearch: {
+                    title: item.title,
+                    artist: item.artist,
+                    requestId: `${Date.now()}-${item.id}`,
+                },
+            },
+        });
+    }
+
     return (
         <section>
             <h1>Favorites</h1>
@@ -37,23 +52,27 @@ export default function Favorites() {
             {!isLoading && !error && items.length === 0 ? (
                 <p>No favorites yet.</p>
             ) : null}
-            <ul>
+            <ul className="song-card-list">
                 {items.map((item) => (
                     <li key={item.id}>
-                        {item.artist} - {item.title}
-                        {item.year ? ` (${item.year})` : ""}
-                        {" | "}
-                        {item.verdict}
-                        {" | "}
-                        {formatUtcRfc2822NoSecondsNoZone(item.timestamp)}
-                        {" "}
-                        <button
-                            type="button"
-                            onClick={() => handleRemove(item.id)}
-                            disabled={pendingDeleteId === item.id}
-                        >
-                            {pendingDeleteId === item.id ? "Removing..." : "Remove"}
-                        </button>
+                        <SongCard
+                            artist={item.artist}
+                            title={item.title}
+                            year={item.year}
+                            verdict={item.verdict}
+                            timestamp={formatUtcRfc2822NoSecondsNoZone(item.timestamp)}
+                            onSelect={() => handleReplaySearch(item)}
+                            selectLabel={`Replay search for ${item.title} by ${item.artist}`}
+                            actions={
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemove(item.id)}
+                                    disabled={pendingDeleteId === item.id}
+                                >
+                                    {pendingDeleteId === item.id ? "Removing..." : "Remove"}
+                                </button>
+                            }
+                        />
                     </li>
                 ))}
             </ul>
