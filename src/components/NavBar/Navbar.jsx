@@ -7,7 +7,7 @@ function segmentClassName({ isActive }) {
 }
 
 export default function NavBar() {
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated } = useAuth();
 
     return (
         <nav className="nav-pill" aria-label="Main navigation">
@@ -38,13 +38,14 @@ export default function NavBar() {
             )}
 
             {isAuthenticated ? (
-                <button
-                    type="button"
-                    className="nav-pill__segment nav-pill__segment--right"
-                    onClick={logout}
+                <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                        `${segmentClassName({ isActive })} nav-pill__segment--right`
+                    }
                 >
-                    Logout
-                </button>
+                    Profile
+                </NavLink>
             ) : (
                 <NavLink
                     to="/login"
