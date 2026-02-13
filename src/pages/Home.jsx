@@ -12,6 +12,7 @@ import {
     findOriginalRecording,
     findRecordingByArtistAndTitle,
     fetchOtherArtistsByWork,
+    findArtistRecordingDateByWork,
 } from "../helpers/musicbrainz";
 import { createFavorite, createHistoryEntry } from "../services/noviApiService.js";
 
@@ -106,8 +107,14 @@ export default function Home() {
                 findBestWorkByTitle(trimmedTitle),
                 findRecordingByArtistAndTitle(trimmedTitle, trimmedArtist),
             ]);
-            if (artistRecording?.date) {
-                searchedYearRaw = artistRecording.date;
+            searchedYearRaw = artistRecording?.date || "";
+            if (!searchedYearRaw && bestWork?.id) {
+                searchedYearRaw = await findArtistRecordingDateByWork(
+                    bestWork.id,
+                    trimmedArtist
+                );
+            }
+            if (searchedYearRaw) {
                 setSearchedSong({
                     artist: trimmedArtist,
                     title: trimmedTitle,

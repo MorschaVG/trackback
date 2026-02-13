@@ -53,3 +53,11 @@ export async function createHistoryEntry(payload, token) {
     const response = await noviClient.post("/history", payload, withAuth(token));
     return response.data;
 }
+
+export async function deleteFavoriteById(id, token) {
+    await noviClient.delete(`/favorites/${id}`, withAuth(token));
+}
+
+export async function deleteHistoryById(id, token) {
+    await noviClient.delete(`/history/${id}`, withAuth(token));
+}
