@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { loginUser } from "../services/noviApiService.js";
 
 const AUTH_STORAGE_KEY = "trackback.auth";
@@ -16,6 +16,18 @@ function decodeJwtPayload(token) {
     } catch {
         return null;
     }
+}
+
+function getTokenExpiryMs(token) {
+    const payload = decodeJwtPayload(token);
+    if (!payload?.exp || typeof payload.exp !== "number") return null;
+    return payload.exp * 1000;
+}
+
+function isTokenExpired(token) {
+    const expiryMs = getTokenExpiryMs(token);
+    if (!expiryMs) return false;
+    return Date.now() >= expiryMs;
 }
 
 function buildUser(loginResponse, token) {
@@ -42,6 +54,11 @@ export function AuthProvider({ children }) {
         try {
             const parsed = JSON.parse(raw);
             if (parsed?.token && parsed?.user) {
+                if (isTokenExpired(parsed.token)) {
+                    localStorage.removeItem(AUTH_STORAGE_KEY);
+                    setIsAuthLoading(false);
+                    return;
+                }
                 setToken(parsed.token);
                 setUser(parsed.user);
             } else {
@@ -69,11 +86,31 @@ export function AuthProvider({ children }) {
         );
     }
 
-    function logout() {
+    const logout = useCallback(() => {
         setToken(null);
         setUser(null);
         localStorage.removeItem(AUTH_STORAGE_KEY);
-    }
+    }, []);
+
+    useEffect(() => {
+        if (!token) return undefined;
+        const expiryMs = getTokenExpiryMs(token);
+        if (!expiryMs) return undefined;
+
+        const timeoutMs = expiryMs - Date.now();
+        if (timeoutMs <= 0) {
+            logout();
+            return undefined;
+        }
+
+        const timeoutId = window.setTimeout(() => {
+            logout();
+        }, timeoutMs);
+
+        return () => {
+            window.clearTimeout(timeoutId);
+        };
+    }, [token, logout]);
 
     const value = useMemo(
         () => ({
@@ -84,7 +121,7 @@ export function AuthProvider({ children }) {
             login,
             logout,
         }),
-        [token, user, isAuthLoading]
+        [token, user, isAuthLoading, logout]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -280,3 +280,32 @@ export async function fetchOtherArtistsByWork(
         a.artist.localeCompare(b.artist)
     );
 }
+
+export async function findArtistRecordingDateByWork(workId, artist) {
+    if (!workId || !artist) return "";
+
+    const recordings = await fetchRecordingsByWork(workId);
+    const normalizedArtist = normalize(artist);
+    const dates = recordings
+        .filter((recording) => {
+            const credits = Array.isArray(recording["artist-credit"])
+                ? recording["artist-credit"]
+                : [];
+            const creditNames = credits
+                .map((credit) => credit.name || credit.artist?.name || "")
+                .filter(Boolean);
+            return creditNames.some((name) => {
+                const normalizedName = normalize(name);
+                return (
+                    normalizedName === normalizedArtist ||
+                    normalizedName.includes(normalizedArtist) ||
+                    normalizedArtist.includes(normalizedName)
+                );
+            });
+        })
+        .map((recording) => recording["first-release-date"] || "")
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+
+    return dates[0] || "";
+}
