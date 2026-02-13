@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import SearchForm from "../components/Home/SearchForm";
 import VerdictSection from "../components/Home/VerdictSection";
 import VersionsPrompt from "../components/Home/VersionsPrompt";
@@ -26,6 +27,9 @@ function toYearNumber(value) {
 
 export default function Home() {
     const { isAuthenticated, token, user } = useAuth();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const processedReplayRef = useRef(null);
     // Form input and request state.
     const [songTitle, setSongTitle] = useState("");
     const [artistName, setArtistName] = useState("");
@@ -42,7 +46,7 @@ export default function Home() {
     const [isSavingFavorite, setIsSavingFavorite] = useState(false);
     const [favoriteSaveMessage, setFavoriteSaveMessage] = useState("");
 
-    async function storeHistory(snapshot) {
+    const storeHistory = useCallback(async (snapshot) => {
         if (!isAuthenticated || !token || !user?.userId) return;
         try {
             await createHistoryEntry(
@@ -58,7 +62,7 @@ export default function Home() {
         } catch (error) {
             console.error("Failed to store history:", error);
         }
-    }
+    }, [isAuthenticated, token, user?.userId]);
 
     async function saveCurrentAsFavorite() {
         if (!lastSearchSnapshot || !isAuthenticated || !token || !user?.userId) return;
@@ -83,9 +87,11 @@ export default function Home() {
         }
     }
 
-    async function checkOriginal() {
+    const runSearchByArtistAndTitle = useCallback(async (inputSongTitle, inputArtistName) => {
+        const trimmedTitle = inputSongTitle.trim();
+        const trimmedArtist = inputArtistName.trim();
         // Guard against empty input or concurrent searches.
-        if (!songTitle.trim() || !artistName.trim() || isRunning) return;
+        if (!trimmedTitle || !trimmedArtist || isRunning) return;
         setIsRunning(true);
         // Reset UI for a fresh lookup.
         setVerdict("");
@@ -94,8 +100,6 @@ export default function Home() {
         setShowVersions(false);
         setShowVersionsPrompt(false);
         setFavoriteSaveMessage("");
-        const trimmedTitle = songTitle.trim();
-        const trimmedArtist = artistName.trim();
         let searchedYearRaw = "";
         setSearchedSong({
             artist: trimmedArtist,
@@ -139,7 +143,7 @@ export default function Home() {
             }
 
             setOriginalInfo(original);
-            const chosenNormalized = normalize(artistName);
+            const chosenNormalized = normalize(trimmedArtist);
             const originalArtists = original.artists || [];
             // Compare normalized artist names for the verdict.
             const matchesOriginal = originalArtists.some(
@@ -163,7 +167,7 @@ export default function Home() {
             if (bestWork?.id) {
                 // When a work exists, load other versions.
                 setIsLoadingVersions(true);
-                const excluded = new Set([normalize(artistName)]);
+                const excluded = new Set([normalize(trimmedArtist)]);
                 if (nextVerdict === "not original") {
                     originalArtists.forEach((artist) => excluded.add(normalize(artist)));
                 }
@@ -181,6 +185,10 @@ export default function Home() {
             setIsLoadingVersions(false);
             setIsRunning(false);
         }
+    }, [excludeLiveOrRemix, isRunning, storeHistory]);
+
+    function checkOriginal() {
+        void runSearchByArtistAndTitle(songTitle, artistName);
     }
 
     async function refreshOtherArtists(nextExcludeLiveOrRemix = excludeLiveOrRemix) {
@@ -203,6 +211,27 @@ export default function Home() {
         setShowVersionsPrompt(artists.length > 0);
         setIsLoadingVersions(false);
     }
+
+    useEffect(() => {
+        const replaySearch = location.state?.replaySearch;
+        if (!replaySearch) return;
+
+        const replayTitle = String(replaySearch.title || "").trim();
+        const replayArtist = String(replaySearch.artist || "").trim();
+        const replayId = String(
+            replaySearch.requestId || `${replayArtist}::${replayTitle}`
+        );
+
+        if (!replayTitle || !replayArtist) return;
+        if (processedReplayRef.current === replayId) return;
+        processedReplayRef.current = replayId;
+
+        setSongTitle(replayTitle);
+        setArtistName(replayArtist);
+        void runSearchByArtistAndTitle(replayTitle, replayArtist);
+
+        navigate("/", { replace: true, state: null });
+    }, [location.state, navigate, runSearchByArtistAndTitle]);
 
     return (
         <div>
