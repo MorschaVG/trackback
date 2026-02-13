@@ -1,47 +1,59 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
+import "./Navbar.css";
 
-const linkStyle = ({ isActive }) => ({
-    padding: "6px 10px",
-    marginRight: 8,
-    border: "1px solid #000",
-    textDecoration: "none",
-    background: isActive ? "#000" : "#fff",
-    color: isActive ? "#fff" : "#000",
-    fontFamily: "Verdana, sans-serif",
-    fontSize: 12,
-});
+function segmentClassName({ isActive }) {
+    return isActive ? "nav-pill__segment nav-pill__segment--active" : "nav-pill__segment";
+}
 
 export default function NavBar() {
-    const { isAuthenticated, user, logout } = useAuth();
+    const { isAuthenticated, logout } = useAuth();
 
     return (
-        <nav style={{ padding: 12, borderBottom: "2px solid #000" }}>
-            <NavLink to="/" style={linkStyle}>Home</NavLink>
+        <nav className="nav-pill" aria-label="Main navigation">
+            <NavLink to="/" className={({ isActive }) =>
+                `${segmentClassName({ isActive })} nav-pill__segment--left`
+            }
+            >
+                Home
+            </NavLink>
+
             {isAuthenticated ? (
-                <>
-                    <NavLink to="/profile" style={linkStyle}>Profile</NavLink>
-                    <NavLink to="/favorites" style={linkStyle}>Favorites</NavLink>
-                    <NavLink to="/history" style={linkStyle}>History</NavLink>
-                    <button
-                        type="button"
-                        onClick={logout}
-                        style={{
-                            ...linkStyle({ isActive: false }),
-                            cursor: "pointer",
-                        }}
-                    >
-                        Logout
-                    </button>
-                    <span style={{ marginLeft: 10, fontSize: 12 }}>
-                        {user?.email}
-                    </span>
-                </>
+                <NavLink
+                    to="/favorites"
+                    className={({ isActive }) =>
+                        `${segmentClassName({ isActive })} nav-pill__segment--middle`
+                    }
+                >
+                    Favorites
+                </NavLink>
             ) : (
-                <>
-                    <NavLink to="/login" style={linkStyle}>Login</NavLink>
-                    <NavLink to="/register" style={linkStyle}>Register</NavLink>
-                </>
+                <button
+                    type="button"
+                    className="nav-pill__segment nav-pill__segment--middle nav-pill__segment--disabled"
+                    disabled
+                >
+                    Favorites
+                </button>
+            )}
+
+            {isAuthenticated ? (
+                <button
+                    type="button"
+                    className="nav-pill__segment nav-pill__segment--right"
+                    onClick={logout}
+                >
+                    Logout
+                </button>
+            ) : (
+                <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                        `${segmentClassName({ isActive })} nav-pill__segment--right`
+                    }
+                >
+                    Login / Signup
+                </NavLink>
             )}
         </nav>
     );
