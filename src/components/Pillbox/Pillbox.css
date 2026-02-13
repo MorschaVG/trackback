@@ -1,0 +1,40 @@
+.pillbox {
+    --pillbox-width: auto;
+    display: inline-flex;
+    align-items: center;
+    width: var(--pillbox-width);
+    border-style: solid;
+    border-radius: 40px;
+    box-sizing: border-box;
+    background: transparent;
+    color: inherit;
+}
+
+.pillbox--large {
+    --pillbox-width: 855px;
+    height: 79px;
+    border-width: 4px;
+}
+
+.pillbox--medium {
+    --pillbox-width: 467px;
+    height: 61px;
+    border-width: 2px;
+}
+
+.pillbox--small {
+    --pillbox-width: 176px;
+    height: 40px;
+    border-width: 2px;
+}
+
+.pillbox-input {
+    padding-inline: 24px;
+    outline: none;
+    border-color: currentColor;
+}
+
+.pillbox-static {
+    padding-inline: 24px;
+    border-color: currentColor;
+}

@@ -63,26 +63,44 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
     --neutral-600: #656877ff;
     --neutral-700: #3f4149ff;
     --neutral-800: #1a1a1aff;
-    --neutral-900: #00000000;
+    --neutral-900: #000000ff;
 
     /* endregion */
 
     /* region SEMANTIC TOKENS */
 
 
-    /* Surfaces */
-    --color-bg:        var(--neutral-50);
-    --color-surface:   var(--neutral-100);
-    --color-surface-2: var(--neutral-200);
+    /* Borders */
+    --color-border-strong: var(--neutral-800);
+    --color-border-light:  var(--neutral-500);
+
+    /* Pillbox surfaces */
+    --color-pillbox-bg-light:  var(--neutral-200);
+    --color-pillbox-bg-medium: var(--neutral-50);
 
     /* Text */
-    --color-text:        var(--neutral-900);
-    --color-text-muted:  var(--neutral-600);
-    --color-text-soft:   var(--neutral-500);
+    --color-text-dark:         var(--neutral-900);
+    --color-text-light:        var(--neutral-500);
+    --color-text-link:         var(--primary-500);
+    --color-text-page-active:  var(--support-orange-500);
+    --color-text-placeholder:  var(--neutral-600);
+    --color-text-logo-header:  var(--primary-800);
+    --color-text-warning:      var(--support-pink-500);
 
-    /* Borders & dividers */
-    --color-border:      var(--neutral-300);
-    --color-border-soft: var(--neutral-200);
+    /* Card surfaces */
+    --color-song-card-bg:                  var(--support-orange-100);
+    --color-verdict-card-bg-original:      var(--primary-200);
+    --color-verdict-card-bg-not-original:  var(--neutral-500);
+
+    /* Backwards-compatible aliases */
+    --color-bg:         var(--color-pillbox-bg-medium);
+    --color-surface:    var(--color-pillbox-bg-light);
+    --color-surface-2:  var(--neutral-100);
+    --color-text:       var(--color-text-dark);
+    --color-text-muted: var(--color-text-light);
+    --color-text-soft:  var(--color-text-placeholder);
+    --color-border:     var(--color-border-strong);
+    --color-border-soft: var(--color-border-light);
 
     /* Brand / interactive */
     --color-primary:        var(--primary-500);
@@ -92,7 +110,7 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
 
     /* Status (kies gerust andere mapping als je app het anders gebruikt) */
     --color-success:        var(--support-yellow-600); /* of een eigen groen als je die hebt */
-    --color-warning:        var(--support-orange-600);
+    --color-warning:        var(--color-text-warning);
     --color-danger:         var(--support-pink-600);
     --color-danger-soft:    var(--support-pink-100);
 
@@ -112,7 +130,7 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
 
     /* endregion */
 
-    /* region SPACING TOKENS */
+    /* region SPACING */
 
     --space-1: 4px;
     --space-2: 8px;
@@ -123,13 +141,23 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
 
     /* endregion */
 
-}
+    /* region TYPOGRAPHY */
 
-    /* region DEFAULTS */
+    --font-family-base: "Roboto Flex", "Roboto", "Helvetica Neue", Arial, sans-serif;
+    --font-family-body: "Roboto", "Helvetica Neue", Arial, sans-serif;
+    --font-family-heading: "Roboto Condensed", "Roboto", "Helvetica Neue", Arial, sans-serif;
 
-body {
-    background: var(--color-bg);
-    color: var(--color-text);
-}
+    --font-weight-thin: 100;
+    --font-weight-extra-light: 200;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extra-bold: 800;
+    --font-weight-black: 900;
+    --font-weight-flex-max: 1000;
 
     /* endregion */
+
+}
