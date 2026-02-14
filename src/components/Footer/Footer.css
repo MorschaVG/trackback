@@ -39,6 +39,29 @@
     text-decoration: none;
 }
 
+.app-footer__logout {
+    background: transparent;
+    border: 0;
+    color: var(--color-text-warning);
+    cursor: pointer;
+    padding: 0;
+}
+
+.app-footer__logout:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.app-footer__link:hover,
+.app-footer__link:focus-visible {
+    color: var(--color-text-link-hover-subtle);
+}
+
+.app-footer__logout:hover,
+.app-footer__logout:focus-visible {
+    color: var(--color-text-warning-hover);
+}
+
 .app-footer__link--active {
     color: var(--color-text-page-active);
 }

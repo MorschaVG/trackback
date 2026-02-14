@@ -9,3 +9,7 @@
     margin-bottom: var(--space-1);
     text-align: center;
 }
+
+.search-form__submit {
+    margin-top: var(--space-1);
+}

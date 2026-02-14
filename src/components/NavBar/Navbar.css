@@ -29,16 +29,21 @@
     height: 100%;
     border: 0;
     background: var(--color-surface, transparent);
-    color: inherit;
+    color: var(--color-text-light);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    font-family: var(--font-family-heading, inherit);
-    font-weight: var(--font-weight-bold, 700);
-    font-size: clamp(0.95rem, 1.2vw, 1.125rem);
+    font-family: var(--font-family-base, inherit);
+    font-weight: var(--font-weight-medium, 500);
+    font-size: 38px;
     line-height: 1;
     cursor: pointer;
+}
+
+.nav-pill__segment:not(.nav-pill__segment--active):not(.nav-pill__segment--disabled):hover,
+.nav-pill__segment:not(.nav-pill__segment--active):not(.nav-pill__segment--disabled):focus-visible {
+    color: var(--color-text-page-hover);
 }
 
 .nav-pill__segment--left {
@@ -103,7 +108,17 @@
     cursor: not-allowed;
 }
 
+.nav-pill__segment--disabled:hover,
+.nav-pill__segment--disabled:focus-visible {
+    color: var(--color-text-light);
+}
+
 .nav-pill__segment--active {
+    color: var(--color-text-page-active, currentColor);
+}
+
+.nav-pill__segment--active:hover,
+.nav-pill__segment--active:focus-visible {
     color: var(--color-text-page-active, currentColor);
 }
 

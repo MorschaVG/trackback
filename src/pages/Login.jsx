@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 import BrandHeader from "../components/BrandHeader/BrandHeader.jsx";
-import { PillboxInput } from "../components/Pillbox/Pillbox.jsx";
+import { Pillbox, PillboxInput } from "../components/Pillbox/Pillbox.jsx";
 import "./AuthPages.css";
 
 export default function Login() {
@@ -31,7 +31,6 @@ export default function Login() {
         <div className="auth-screen">
             <BrandHeader />
             <section className="auth-page">
-                <h1>Login</h1>
                 <form onSubmit={handleSubmit} className="auth-form">
                     <label htmlFor="email" className="auth-label">Email</label>
                     <PillboxInput
@@ -40,15 +39,17 @@ export default function Login() {
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
                         required
+                        width={367}
                         className="auth-input"
                     />
-                    <label htmlFor="password" className="auth-label">Password</label>
+                    <label htmlFor="password" className="auth-label">Wachtwoord</label>
                     <PillboxInput
                         id="password"
                         type="password"
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
                         required
+                        width={367}
                         className="auth-input"
                     />
                     <p className="auth-helper">
@@ -56,9 +57,16 @@ export default function Login() {
                         <br />
                         klik <Link to="/register" className="auth-helper-link">hier</Link>
                     </p>
-                    <button type="submit" disabled={isSubmitting}>
+                    <Pillbox
+                        as="button"
+                        type="submit"
+                        size="small"
+                        width={167}
+                        disabled={isSubmitting}
+                        className="auth-submit"
+                    >
                         {isSubmitting ? "Logging in..." : "Login"}
-                    </button>
+                    </Pillbox>
                     {error ? <p className="auth-error">{error}</p> : null}
                 </form>
             </section>

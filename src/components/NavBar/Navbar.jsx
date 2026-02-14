@@ -17,7 +17,7 @@ export default function NavBar() {
             }
             >
                 <img src={logoNav} alt="" aria-hidden="true" className="nav-pill__brand-logo" />
-                Home
+                HOME
             </NavLink>
 
             {isAuthenticated ? (
@@ -27,7 +27,7 @@ export default function NavBar() {
                         `${segmentClassName({ isActive })} nav-pill__segment--middle`
                     }
                 >
-                    Favorites
+                    FAVORITES
                 </NavLink>
             ) : (
                 <button
@@ -35,7 +35,7 @@ export default function NavBar() {
                     className="nav-pill__segment nav-pill__segment--middle nav-pill__segment--disabled"
                     disabled
                 >
-                    Favorites
+                    FAVORITES
                 </button>
             )}
 
@@ -46,7 +46,7 @@ export default function NavBar() {
                         `${segmentClassName({ isActive })} nav-pill__segment--right`
                     }
                 >
-                    Profile
+                    PROFILE
                 </NavLink>
             ) : (
                 <NavLink
@@ -55,7 +55,7 @@ export default function NavBar() {
                         `${segmentClassName({ isActive })} nav-pill__segment--right`
                     }
                 >
-                    Login / Signup
+                    LOGIN / SIGNUP
                 </NavLink>
             )}
         </nav>

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 import "./Footer.css";
 
 function footerLinkClassName({ isActive }) {
@@ -6,6 +7,8 @@ function footerLinkClassName({ isActive }) {
 }
 
 export default function Footer() {
+    const { logout, isAuthenticated } = useAuth();
+
     return (
         <footer className="app-footer" aria-label="Footer">
             <div className="app-footer__logo" aria-hidden="true" />
@@ -16,6 +19,14 @@ export default function Footer() {
                 <NavLink to="/about" className={footerLinkClassName}>
                     About
                 </NavLink>
+                <button
+                    type="button"
+                    onClick={logout}
+                    disabled={!isAuthenticated}
+                    className="app-footer__link app-footer__logout"
+                >
+                    Logout
+                </button>
             </nav>
         </footer>
     );

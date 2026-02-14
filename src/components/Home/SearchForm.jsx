@@ -1,4 +1,4 @@
-import { PillboxInput } from "../Pillbox/Pillbox.jsx";
+import { Pillbox, PillboxInput } from "../Pillbox/Pillbox.jsx";
 import "./SearchForm.css";
 
 // Form for entering song/artist and triggering a search.
@@ -19,6 +19,7 @@ export default function SearchForm({
                 onChange={onSongTitleChange}
                 placeholder="Voer de titel van een nummer in..."
                 size="medium"
+                width={367}
                 className="search-form__input"
             />
             <PillboxInput
@@ -28,16 +29,20 @@ export default function SearchForm({
                 onChange={onArtistNameChange}
                 placeholder="Van welke artiest denk jij dat het origineel is?"
                 size="medium"
+                width={367}
                 className="search-form__input"
             />
-            <button
+            <Pillbox
+                as="button"
                 type="button"
                 onClick={onSearch}
                 disabled={isRunning}
-                className="home-button"
+                size="small"
+                width={167}
+                className="search-form__submit"
             >
                 {isRunning ? "Searching..." : "Search"}
-            </button>
+            </Pillbox>
         </div>
     );
 }
