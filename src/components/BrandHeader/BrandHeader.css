@@ -8,8 +8,8 @@
 }
 
 .brand-header__logo {
-    width: 171.1px;
-    height: 149.7px;
+    width: 128.33px;
+    height: 112.28px;
     object-fit: contain;
     flex-shrink: 0;
 }
@@ -35,7 +35,7 @@
     }
 
     .brand-header__logo {
-        width: 153px;
+        width: 114.75px;
         height: auto;
     }
 

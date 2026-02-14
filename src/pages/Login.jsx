@@ -19,9 +19,9 @@ export default function Login() {
         setIsSubmitting(true);
         try {
             await login({ email: email.trim(), password });
-            navigate("/profile", { replace: true });
+            navigate("/", { replace: true });
         } catch {
-            setError("Login failed. Check your credentials and config headers.");
+            setError("Inloggen mislukt. Heb je wel de juiste gegevens?");
         } finally {
             setIsSubmitting(false);
         }

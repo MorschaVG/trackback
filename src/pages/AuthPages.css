@@ -48,6 +48,12 @@
     align-self: center;
 }
 
+.auth-submit:not(:disabled):hover,
+.auth-submit:not(:disabled):focus-visible {
+    color: var(--color-text-page-hover);
+    border-color: var(--color-text-page-hover);
+}
+
 .auth-error {
     color: var(--color-text-warning);
 }

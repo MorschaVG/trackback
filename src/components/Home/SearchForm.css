@@ -5,6 +5,18 @@
     gap: var(--space-2);
 }
 
+.search-form__box {
+    width: 720px;
+    max-width: 100%;
+    border: 2px solid #000;
+    border-radius: 12px;
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+}
+
 .search-form__input {
     margin-bottom: var(--space-1);
     text-align: center;
@@ -12,4 +24,15 @@
 
 .search-form__submit {
     margin-top: var(--space-1);
+}
+
+.search-form__submit:not(:disabled):hover,
+.search-form__submit:not(:disabled):focus-visible {
+    color: var(--color-text-page-hover);
+    border-color: var(--color-text-page-hover);
+}
+
+.search-form__submit--running {
+    color: var(--color-text-warning);
+    border-color: var(--color-text-warning);
 }

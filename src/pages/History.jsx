@@ -26,7 +26,7 @@ export default function History() {
             await Promise.all(items.map((item) => deleteHistoryById(item.id, token)));
             setItems([]);
         } catch {
-            setActionError("Could not clear history.");
+            setActionError("Geschiedenis wissen mislukt.");
         } finally {
             setIsClearing(false);
         }
@@ -54,11 +54,11 @@ export default function History() {
             >
                 {isClearing ? "Clearing..." : "Clear history"}
             </button>
-            {isLoading ? <p>Loading history...</p> : null}
+            {isLoading ? <p>Geschiedenis laden...</p> : null}
             {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
             {actionError ? <p style={{ color: "crimson" }}>{actionError}</p> : null}
             {!isLoading && !error && items.length === 0 ? (
-                <p>No history yet.</p>
+                <p>Je hebt nog geen geschiedenis.</p>
             ) : null}
             <ul className="song-card-list">
                 {items.map((item) => (

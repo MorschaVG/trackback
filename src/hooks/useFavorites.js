@@ -19,7 +19,7 @@ export function useFavorites(userId, token) {
                 }
             } catch {
                 if (isMounted) {
-                    setError("Could not load favorites.");
+                    setError("Favorieten laden mislukt.");
                 }
             } finally {
                 if (isMounted) {

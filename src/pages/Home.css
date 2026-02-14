@@ -6,9 +6,78 @@
 .versions-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: var(--space-3) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
+.versions-button {
+  margin-top: var(--space-3);
+  color: var(--color-text-warning);
+  border-color: var(--color-text-warning);
+}
+
+.versions-button:not(:disabled):hover,
+.versions-button:not(:disabled):focus-visible {
+  color: var(--color-text-warning-hover);
+  border-color: var(--color-text-warning-hover);
+}
+
+.versions-list > li {
+  flex: 0 0 calc(25% - var(--space-3));
+  display: flex;
+  justify-content: center;
+}
+
+.versions-list .song-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .versions-list > li {
+    flex: 0 0 calc(50% - var(--space-3));
+  }
+}
+
+@media (max-width: 700px) {
+  .versions-list {
+    justify-content: center;
+  }
+  .versions-list > li {
+    flex: 0 0 100%;
+  }
+}
+
+.home-welcome-text {
+  color: var(--color-text-dark);
+  font-size: x-large;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 440px;
+  max-width: 100%;
+  margin: 47px auto;
+  text-align: center;
+  text-shadow: var(--color-text-link) 1px 1px 3px;
+
+}
+
+.home-welcome-text a {
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+}
+
+.home-welcome-line {
+  display: inline;
+}
+.highlight-word {
+  color: var(--color-text-logo-header);
+  font-weight: var(--font-weight-bold);
+}
 @media (prefers-color-scheme: light) {
   .home-button {
     border-color: #000000;
