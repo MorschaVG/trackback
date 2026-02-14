@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/noviApiService.js";
+import BrandHeader from "../components/BrandHeader/BrandHeader.jsx";
 import { PillboxInput } from "../components/Pillbox/Pillbox.jsx";
 import "./AuthPages.css";
 
@@ -38,41 +39,44 @@ export default function Register() {
     }
 
     return (
-        <section className="auth-page">
-            <h1>Register</h1>
-            <form onSubmit={handleSubmit} className="auth-form">
-                <label htmlFor="register-email" className="auth-label">Email</label>
-                <PillboxInput
-                    id="register-email"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                    className="auth-input"
-                />
-                <label htmlFor="register-password" className="auth-label">Password</label>
-                <PillboxInput
-                    id="register-password"
-                    type="password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    required
-                    className="auth-input"
-                />
-                <label htmlFor="register-confirm-password" className="auth-label">Confirm password</label>
-                <PillboxInput
-                    id="register-confirm-password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(event) => setConfirmPassword(event.target.value)}
-                    required
-                    className="auth-input"
-                />
-                <button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? "Creating account..." : "Create account"}
-                </button>
-                {error ? <p className="auth-error">{error}</p> : null}
-            </form>
-        </section>
+        <div className="auth-screen">
+            <BrandHeader />
+            <section className="auth-page">
+                <h1>Register</h1>
+                <form onSubmit={handleSubmit} className="auth-form">
+                    <label htmlFor="register-email" className="auth-label">Email</label>
+                    <PillboxInput
+                        id="register-email"
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        required
+                        className="auth-input"
+                    />
+                    <label htmlFor="register-password" className="auth-label">Password</label>
+                    <PillboxInput
+                        id="register-password"
+                        type="password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        required
+                        className="auth-input"
+                    />
+                    <label htmlFor="register-confirm-password" className="auth-label">Confirm password</label>
+                    <PillboxInput
+                        id="register-confirm-password"
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(event) => setConfirmPassword(event.target.value)}
+                        required
+                        className="auth-input"
+                    />
+                    <button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? "Creating account..." : "Create account"}
+                    </button>
+                    {error ? <p className="auth-error">{error}</p> : null}
+                </form>
+            </section>
+        </div>
     );
 }

@@ -8,6 +8,8 @@ import Register from "../pages/Register.jsx";
 import History from "../pages/History.jsx";
 import Profile from "../pages/Profile.jsx";
 import NotFound from "../pages/NotFound.jsx";
+import Contact from "../pages/Contact.jsx";
+import About from "../pages/About.jsx";
 import ProtectedRoute from "../routes/ProtectedRoute.jsx";
 import PublicOnlyRoute from "../routes/PublicOnlyRoute.jsx";
 
@@ -26,6 +28,8 @@ function App() {
                     <Route path="favorites" element={<Favorites />} />
                     <Route path="history" element={<History />} />
                 </Route>
+                <Route path="contact" element={<Contact />} />
+                <Route path="about" element={<About />} />
                 <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>

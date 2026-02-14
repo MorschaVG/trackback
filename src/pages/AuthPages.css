@@ -1,6 +1,12 @@
+.auth-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .auth-page {
     max-width: 520px;
-    margin: 0 auto;
+    margin: 90px auto 0;
 }
 
 .auth-form {
