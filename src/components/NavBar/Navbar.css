@@ -2,7 +2,7 @@
     --nav-border-color: var(--color-border-light);
     width: min(1164px, calc(100% - 80px));
     height: 79px;
-    margin: 40px auto 0;
+    margin: 10px auto 0;
     position: relative;
     border: 0;
     border-radius: 40px;

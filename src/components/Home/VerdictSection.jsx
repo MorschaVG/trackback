@@ -61,7 +61,8 @@ export default function VerdictSection({
             {canSaveFavorite ? (
                 <div style={{ marginTop: 12 }}>
                     <p className="verdict-save-text">
-                        Sla deze zoektocht op zodat je er later naar terug kan komen, je kan dan de versies hieronder ook weer zien!
+                        Sla deze zoektocht op in je favorites.
+                        {/*zodat je er later naar terug kan komen, je kan dan de versies hieronder ook weer zien!*/}
                     </p>
                     <Pillbox
                         as="button"

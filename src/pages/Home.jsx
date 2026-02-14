@@ -46,6 +46,8 @@ export default function Home() {
     const [lastSearchSnapshot, setLastSearchSnapshot] = useState(null);
     const [isSavingFavorite, setIsSavingFavorite] = useState(false);
     const [favoriteSaveMessage, setFavoriteSaveMessage] = useState("");
+    const versionsToggleRef = useRef(null);
+    const shouldScrollToVersionsRef = useRef(false);
 
     useEffect(() => {
         if (isAuthenticated) return;
@@ -259,9 +261,23 @@ export default function Home() {
         navigate("/", { replace: true, state: null });
     }, [location.state, navigate, runSearchByArtistAndTitle]);
 
+    useEffect(() => {
+        if (!showVersions || !shouldScrollToVersionsRef.current) return;
+        shouldScrollToVersionsRef.current = false;
+        const target = versionsToggleRef.current;
+        if (!target) return;
+        const top = target.getBoundingClientRect().top + window.scrollY - 20;
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    }, [showVersions]);
+
     return (
         <div>
-            {!isAuthenticated ? <BrandHeader /> : <h3>Zoek een nummer én artiest en kijk of jij het origineel in gedachten had!</h3>}
+            {!isAuthenticated ? (
+                <>
+                    <BrandHeader />
+                    <h3>Zoek een nummer én artiest en kijk of jij het origineel in gedachten had!</h3>
+                </>
+            ) : null}
             {isAuthenticated ? (
                 <SearchForm
                     songTitle={songTitle}
@@ -295,7 +311,19 @@ export default function Home() {
             <VersionsPrompt
                 show={showVersionsPrompt}
                 showVersions={showVersions}
-                onToggle={() => setShowVersions((value) => !value)}
+                onToggle={() => {
+                    setShowVersions((value) => {
+                        const nextValue = !value;
+                        if (nextValue) {
+                            shouldScrollToVersionsRef.current = true;
+                        } else {
+                            shouldScrollToVersionsRef.current = false;
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                        }
+                        return nextValue;
+                    });
+                }}
+                buttonRef={versionsToggleRef}
             />
             {isLoadingVersions ? <p>Andere versies zoeken...</p> : null}
             <VersionsList
