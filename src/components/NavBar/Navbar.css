@@ -44,6 +44,7 @@
 .nav-pill__segment:not(.nav-pill__segment--active):not(.nav-pill__segment--disabled):hover,
 .nav-pill__segment:not(.nav-pill__segment--active):not(.nav-pill__segment--disabled):focus-visible {
     color: var(--color-text-page-hover);
+    text-shadow: 0 0 4px var(--color-text-page-hover-glow);
 }
 
 .nav-pill__segment--left {

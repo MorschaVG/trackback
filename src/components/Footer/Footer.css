@@ -55,11 +55,13 @@
 .app-footer__link:hover,
 .app-footer__link:focus-visible {
     color: var(--color-text-link-hover-subtle);
+    text-shadow: 0 0 4px var(--color-text-link-hover-subtle-glow);
 }
 
 .app-footer__logout:hover,
 .app-footer__logout:focus-visible {
     color: var(--color-text-warning-hover);
+    text-shadow: 0 0 4px var(--color-text-warning-hover-glow);
 }
 
 .app-footer__link--active {

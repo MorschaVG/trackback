@@ -85,11 +85,14 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
     --color-text-link-hover-subtle: var(--neutral-800);
     --color-text-page-active:  var(--support-orange-500);
     --color-text-page-hover:   var(--support-orange-700);
+    --color-text-page-hover-glow: var(--support-orange-500);
     --color-input-placeholder: var(--color-text-dark);
     --color-text-placeholder:  var(--color-input-placeholder);
     --color-text-logo-header:  var(--primary-800);
     --color-text-warning:      var(--support-pink-500);
     --color-text-warning-hover: var(--support-pink-800);
+    --color-text-warning-hover-glow: var(--support-pink-600);
+    --color-text-link-hover-subtle-glow: var(--neutral-600);
     --color-input-active-border: var(--support-orange-500);
 
     /* Card surfaces */

@@ -12,6 +12,8 @@
     height: 112.28px;
     object-fit: contain;
     flex-shrink: 0;
+    animation: logo-pulse 4s ease-in-out infinite;
+    transform-origin: center;
 }
 
 .brand-header__title {
@@ -41,5 +43,22 @@
 
     .brand-header__title {
         font-size: clamp(2.34rem, 10.2vw, 3.83rem);
+    }
+}
+
+@keyframes logo-pulse {
+    0%,
+    45%,
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    55% {
+        transform: scale(1.08);
+        filter: brightness(1.18);
+    }
+    62% {
+        transform: scale(1);
+        filter: brightness(1);
     }
 }
