@@ -31,10 +31,24 @@
 .pillbox-input {
     padding-inline: 24px;
     outline: none;
-    border-color: currentColor;
+    border-color: var(--color-border-light);
+    font-weight: var(--font-weight-light);
+    color: var(--color-input-placeholder);
+    font-style: italic;
+}
+
+.pillbox-input::placeholder {
+    color: var(--color-input-placeholder);
+    opacity: 1;
+}
+
+.pillbox-input:focus,
+.pillbox-input:focus-visible {
+    border-color: var(--color-input-active-border);
 }
 
 .pillbox-static {
+    justify-content: center;
     padding-inline: 24px;
     border-color: currentColor;
 }

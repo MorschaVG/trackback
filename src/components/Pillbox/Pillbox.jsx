@@ -16,7 +16,7 @@ function buildClassName(parts) {
     return parts.filter(Boolean).join(" ");
 }
 
-export default function Pillbox({
+export function Pillbox({
     as: Component = "div",
     size = "medium",
     width,
@@ -36,6 +36,8 @@ export default function Pillbox({
         ...props,
     });
 }
+
+export default Pillbox;
 
 export function PillboxInput({
     size = "medium",

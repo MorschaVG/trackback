@@ -82,10 +82,15 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
     --color-text-dark:         var(--neutral-900);
     --color-text-light:        var(--neutral-500);
     --color-text-link:         var(--primary-500);
+    --color-text-link-hover-subtle: var(--neutral-800);
     --color-text-page-active:  var(--support-orange-500);
-    --color-text-placeholder:  var(--neutral-600);
+    --color-text-page-hover:   var(--support-orange-700);
+    --color-input-placeholder: var(--primary-500);
+    --color-text-placeholder:  var(--color-input-placeholder);
     --color-text-logo-header:  var(--primary-800);
     --color-text-warning:      var(--support-pink-500);
+    --color-text-warning-hover: var(--support-pink-800);
+    --color-input-active-border: var(--support-orange-500);
 
     /* Card surfaces */
     --color-song-card-bg:                  var(--support-orange-100);
@@ -93,7 +98,7 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
     --color-verdict-card-bg-not-original:  var(--neutral-500);
 
     /* Backwards-compatible aliases */
-    --color-bg:         var(--color-pillbox-bg-medium);
+    --color-bg:         var(--neutral-100);
     --color-surface:    var(--color-pillbox-bg-light);
     --color-surface-2:  var(--neutral-100);
     --color-text:       var(--color-text-dark);
@@ -108,8 +113,8 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
     --color-primary-active: var(--primary-800);
     --color-primary-soft:   var(--primary-100);
 
-    /* Status (kies gerust andere mapping als je app het anders gebruikt) */
-    --color-success:        var(--support-yellow-600); /* of een eigen groen als je die hebt */
+    /* Status */
+    --color-success:        var(--support-yellow-600);
     --color-warning:        var(--color-text-warning);
     --color-danger:         var(--support-pink-600);
     --color-danger-soft:    var(--support-pink-100);
