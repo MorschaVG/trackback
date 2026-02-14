@@ -26,7 +26,6 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                     <Route path="profile" element={<Profile />} />
                     <Route path="favorites" element={<Favorites />} />
-                    <Route path="history" element={<History />} />
                 </Route>
                 <Route path="contact" element={<Contact />} />
                 <Route path="about" element={<About />} />

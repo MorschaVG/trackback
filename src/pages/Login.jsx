@@ -65,7 +65,7 @@ export default function Login() {
                         disabled={isSubmitting}
                         className="auth-submit"
                     >
-                        {isSubmitting ? "Logging in..." : "Login"}
+                        {isSubmitting ? "Inloggen..." : "Login"}
                     </Pillbox>
                     {error ? <p className="auth-error">{error}</p> : null}
                 </form>

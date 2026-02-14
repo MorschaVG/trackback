@@ -38,9 +38,23 @@
   font-size: 0.95rem;
 }
 
+.song-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
 .song-card__meta {
   font-size: 0.9rem;
   opacity: 0.9;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-dark);
+}
+
+.song-card__meta-emphasis {
+  color: var(--color-text-warning);
+  text-decoration: underline;
+  font-weight: var(--font-weight-bold);
 }
 
 .song-card--original {
@@ -48,8 +62,40 @@
   border-color: var(--support-orange-700);
 }
 
+.song-card__footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .song-card__actions {
-  margin-top: 0.45rem;
+  margin-top: 0.25rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.song-card__icon-button {
+  border: 0;
+  background: transparent;
+  color: var(--color-text-warning);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.song-card__icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.song-card__icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  object-fit: contain;
 }
 
 .song-card-list {

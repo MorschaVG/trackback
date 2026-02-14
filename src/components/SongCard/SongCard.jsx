@@ -26,11 +26,11 @@ export default function SongCard({
         selectLabel || `Search for ${titleText} by ${artistText} again`;
 
     const content = (
-        <>
+        <div className="song-card__body">
             <p className="song-card__artist">{artistText}</p>
             <p className="song-card__title">{titleText}</p>
             <p className="song-card__year">{yearText}</p>
-        </>
+        </div>
     );
 
     return (
@@ -47,9 +47,25 @@ export default function SongCard({
             ) : (
                 content
             )}
-            {verdictText ? <p className="song-card__meta">Verdict: {verdictText}</p> : null}
-            {timestampText ? <p className="song-card__meta">Opgeslagen: {timestampText}</p> : null}
-            {actions ? <div className="song-card__actions">{actions}</div> : null}
+            <div className="song-card__footer">
+                {verdictText ? (
+                    <p className="song-card__meta">
+                        {verdictText === "original" ? (
+                            "Dit was het origineel"
+                        ) : verdictText === "not original" ? (
+                            <>
+                                Dit was{" "}
+                                <span className="song-card__meta-emphasis">niet</span>{" "}
+                                het origineel
+                            </>
+                        ) : (
+                            `Verdict: ${verdictText}`
+                        )}
+                    </p>
+                ) : null}
+                {timestampText ? <p className="song-card__meta">{timestampText}</p> : null}
+                {actions ? <div className="song-card__actions">{actions}</div> : null}
+            </div>
         </div>
     );
 }
