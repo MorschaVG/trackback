@@ -1,8 +1,3 @@
-/* Home-specific button borders that flip with color scheme. */
-.home-button {
-  border-color: #ffffff;
-}
-
 .versions-list {
   list-style: none;
   padding: 0;
@@ -77,9 +72,4 @@
 .highlight-word {
   color: var(--color-text-logo-header);
   font-weight: var(--font-weight-bold);
-}
-@media (prefers-color-scheme: light) {
-  .home-button {
-    border-color: #000000;
-  }
 }
