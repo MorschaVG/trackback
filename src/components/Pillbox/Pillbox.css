@@ -10,12 +10,6 @@
     color: inherit;
 }
 
-.pillbox--large {
-    --pillbox-width: 855px;
-    height: 79px;
-    border-width: 4px;
-}
-
 .pillbox--medium {
     --pillbox-width: 467px;
     height: 61px;

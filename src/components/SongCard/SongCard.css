@@ -98,12 +98,6 @@
   object-fit: contain;
 }
 
-.song-card-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 @media (prefers-color-scheme: light) {
   .song-card {
     border-color: var(--color-border-strong);
