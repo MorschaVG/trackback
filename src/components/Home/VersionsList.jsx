@@ -1,4 +1,5 @@
 import SongCard from "../SongCard/SongCard";
+import { Pillbox } from "../Pillbox/Pillbox.jsx";
 
 // List of other artists plus toggle for live/remix inclusion.
 export default function VersionsList({
@@ -13,15 +14,17 @@ export default function VersionsList({
 
     return (
         <div>
-            <h3>Other versions</h3>
-            <button
+            <Pillbox
+                as="button"
                 type="button"
                 onClick={onToggleExclude}
                 disabled={isRunning || isLoadingVersions}
-                className="home-button"
+                size="small"
+                width={167}
+                className="versions-button"
             >
                 {excludeLiveOrRemix ? "Include live/remix" : "Exclude live/remix"}
-            </button>
+            </Pillbox>
             <ul className="versions-list">
                 {otherVersions.map((version) => (
                     <li key={version.id || `${version.artist}-${version.title}`}>

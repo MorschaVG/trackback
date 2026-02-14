@@ -11,7 +11,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: stretch;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .nav-pill::before {
@@ -106,11 +106,36 @@
 .nav-pill__segment--disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    pointer-events: auto;
 }
 
 .nav-pill__segment--disabled:hover,
 .nav-pill__segment--disabled:focus-visible {
     color: var(--color-text-light);
+}
+
+.nav-pill__tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--color-surface, transparent);
+    color: var(--color-text-warning);
+    font-size: 14px;
+    font-weight: var(--font-weight-regular);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 50;
+}
+
+.nav-pill__segment--disabled:hover .nav-pill__tooltip,
+.nav-pill__segment--disabled:focus-visible .nav-pill__tooltip,
+.nav-pill__segment--disabled:focus .nav-pill__tooltip {
+    opacity: 1;
 }
 
 .nav-pill__segment--active {

@@ -30,13 +30,17 @@ export default function NavBar() {
                     FAVORITES
                 </NavLink>
             ) : (
-                <button
-                    type="button"
+                <span
+                    role="button"
+                    aria-disabled="true"
                     className="nav-pill__segment nav-pill__segment--middle nav-pill__segment--disabled"
-                    disabled
+                    tabIndex={0}
                 >
                     FAVORITES
-                </button>
+                    <span className="nav-pill__tooltip">
+                        Log in om je favorieten te bekijken!
+                    </span>
+                </span>
             )}
 
             {isAuthenticated ? (

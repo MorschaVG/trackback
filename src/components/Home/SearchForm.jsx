@@ -12,6 +12,7 @@ export default function SearchForm({
 }) {
     return (
         <div className="search-form">
+            <div className="search-form__box">
             <PillboxInput
                 id="song-title-input"
                 type="text"
@@ -38,11 +39,12 @@ export default function SearchForm({
                 onClick={onSearch}
                 disabled={isRunning}
                 size="small"
-                width={167}
-                className="search-form__submit"
+                width={134}
+                className={isRunning ? "search-form__submit search-form__submit--running" : "search-form__submit"}
             >
-                {isRunning ? "Searching..." : "Search"}
+                {isRunning ? "Zoeken..." : "Zoeken"}
             </Pillbox>
+            </div>
         </div>
     );
 }

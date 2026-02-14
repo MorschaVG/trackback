@@ -35,11 +35,18 @@
     font-weight: var(--font-weight-light);
     color: var(--color-input-placeholder);
     font-style: italic;
+    text-align: center;
 }
 
 .pillbox-input::placeholder {
     color: var(--color-input-placeholder);
     opacity: 1;
+}
+
+.pillbox-input:not(:placeholder-shown) {
+    font-weight: var(--font-weight-bold);
+    font-style: normal;
+    color: var(--color-text-dark);
 }
 
 .pillbox-input:focus,

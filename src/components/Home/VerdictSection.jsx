@@ -1,4 +1,6 @@
 import SongCard from "../SongCard/SongCard";
+import { Pillbox } from "../Pillbox/Pillbox.jsx";
+import "./VerdictSection.css";
 
 function formatArtists(artists) {
     if (Array.isArray(artists)) return artists.join(" & ");
@@ -25,34 +27,53 @@ export default function VerdictSection({
         verdict === "original" && originalInfo?.date ? originalInfo.date : searchedSong.year;
 
     return (
-        <div>
-            <h2>Verdict: {verdict}</h2>
-            <p>Your search</p>
-            <SongCard
-                artist={searchedSong.artist}
-                title={searchedSong.title}
-                year={searchedYear}
-            />
-            {shouldShowOriginal ? (
-                <>
-                    <p>Original version</p>
+        <div className="verdict-section">
+            <div className="verdict-card">
+                {verdict === "original" ? (
+                    <p className="verdict-card__text">Dit is het origineel!</p>
+                ) : (
+                    <p className="verdict-card__text">
+                        Dit is <span className="verdict-card__emphasis">NIET</span> het origineel!
+                    </p>
+                )}
+            </div>
+            <div className="verdict-cards">
+                <div className="verdict-cards__item">
+                    <p className="verdict-cards__label">Jij zocht:</p>
                     <SongCard
-                        artist={originalArtistText}
-                        title={originalTitleText}
-                        year={originalYear}
+                        artist={searchedSong.artist}
+                        title={searchedSong.title}
+                        year={searchedYear}
                     />
-                </>
-            ) : null}
+                </div>
+                {shouldShowOriginal ? (
+                    <div className="verdict-cards__item verdict-cards__item--original">
+                        <p className="verdict-cards__label verdict-cards__label--original">Het origineel:</p>
+                        <SongCard
+                            artist={originalArtistText}
+                            title={originalTitleText}
+                            year={originalYear}
+                            className="song-card--original"
+                        />
+                    </div>
+                ) : null}
+            </div>
             {canSaveFavorite ? (
                 <div style={{ marginTop: 12 }}>
-                    <button
+                    <p className="verdict-save-text">
+                        Sla deze zoektocht op zodat je er later naar terug kan komen, je kan dan de versies hieronder ook weer zien!
+                    </p>
+                    <Pillbox
+                        as="button"
                         type="button"
                         onClick={onSaveFavorite}
                         disabled={isSavingFavorite}
-                        className="home-button"
+                        size="small"
+                        width={167}
+                        className="verdict-save-button"
                     >
-                        {isSavingFavorite ? "Saving..." : "Save to favorites"}
-                    </button>
+                        {isSavingFavorite ? "Aan het opslaan..." : "Opslaan"}
+                    </Pillbox>
                     {favoriteSaveMessage ? <p>{favoriteSaveMessage}</p> : null}
                 </div>
             ) : null}

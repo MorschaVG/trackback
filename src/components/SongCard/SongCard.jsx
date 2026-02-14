@@ -3,7 +3,7 @@ import "./SongCard.css";
 function formatYear(year) {
     const text = String(year || "").trim();
     const match = text.match(/\d{4}/);
-    return match ? match[0] : "Year unknown";
+    return match ? match[0] : "Jaar onbekend.";
 }
 
 export default function SongCard({
@@ -15,6 +15,7 @@ export default function SongCard({
     actions,
     onSelect,
     selectLabel,
+    className = "",
 }) {
     const artistText = artist?.trim() ? artist : "Unknown artist";
     const titleText = title?.trim() ? title : "Unknown title";
@@ -33,7 +34,7 @@ export default function SongCard({
     );
 
     return (
-        <div className="song-card">
+        <div className={["song-card", className].filter(Boolean).join(" ")}>
             {onSelect ? (
                 <button
                     type="button"
@@ -47,7 +48,7 @@ export default function SongCard({
                 content
             )}
             {verdictText ? <p className="song-card__meta">Verdict: {verdictText}</p> : null}
-            {timestampText ? <p className="song-card__meta">Saved: {timestampText}</p> : null}
+            {timestampText ? <p className="song-card__meta">Opgeslagen: {timestampText}</p> : null}
             {actions ? <div className="song-card__actions">{actions}</div> : null}
         </div>
     );

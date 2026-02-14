@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SearchForm from "../components/Home/SearchForm";
 import VerdictSection from "../components/Home/VerdictSection";
 import VersionsPrompt from "../components/Home/VersionsPrompt";
@@ -47,6 +47,22 @@ export default function Home() {
     const [isSavingFavorite, setIsSavingFavorite] = useState(false);
     const [favoriteSaveMessage, setFavoriteSaveMessage] = useState("");
 
+    useEffect(() => {
+        if (isAuthenticated) return;
+        setSongTitle("");
+        setArtistName("");
+        setSearchedSong(null);
+        setVerdict("");
+        setOriginalInfo(null);
+        setOtherVersions([]);
+        setShowVersionsPrompt(false);
+        setShowVersions(false);
+        setIsLoadingVersions(false);
+        setExcludeLiveOrRemix(false);
+        setLastSearchSnapshot(null);
+        setFavoriteSaveMessage("");
+    }, [isAuthenticated]);
+
     const storeHistory = useCallback(async (snapshot) => {
         if (!isAuthenticated || !token || !user?.userId) return;
         try {
@@ -80,9 +96,9 @@ export default function Home() {
                 },
                 token
             );
-            setFavoriteSaveMessage("Saved to favorites.");
+            setFavoriteSaveMessage("Opgeslagen.");
         } catch {
-            setFavoriteSaveMessage("Could not save favorite.");
+            setFavoriteSaveMessage("Opslaan mislukt.");
         } finally {
             setIsSavingFavorite(false);
         }
@@ -107,6 +123,7 @@ export default function Home() {
             title: trimmedTitle,
             year: "",
         });
+        let didSearchComplete = false;
         try {
             const [bestWork, artistRecording] = await Promise.all([
                 findBestWorkByTitle(trimmedTitle),
@@ -132,6 +149,7 @@ export default function Home() {
                 (await findOriginalRecording(trimmedTitle));
             if (!original) {
                 setVerdict("unknown");
+                didSearchComplete = true;
                 const unknownSnapshot = {
                     title: trimmedTitle,
                     artist: trimmedArtist,
@@ -153,6 +171,7 @@ export default function Home() {
             const nextVerdict = matchesOriginal ? "original" : "not original";
 
             setVerdict(nextVerdict);
+            didSearchComplete = true;
             const resolvedYear = matchesOriginal
                 ? toYearNumber(original.date || searchedYearRaw)
                 : toYearNumber(searchedYearRaw);
@@ -185,6 +204,10 @@ export default function Home() {
         } finally {
             setIsLoadingVersions(false);
             setIsRunning(false);
+            if (didSearchComplete) {
+                setSongTitle("");
+                setArtistName("");
+            }
         }
     }, [excludeLiveOrRemix, isRunning, storeHistory]);
 
@@ -194,10 +217,12 @@ export default function Home() {
 
     async function refreshOtherArtists(nextExcludeLiveOrRemix = excludeLiveOrRemix) {
         // Refresh list when toggling live/remix exclusion.
-        const bestWork = await findBestWorkByTitle(songTitle.trim());
+        const titleSource = searchedSong?.title || songTitle;
+        const artistSource = searchedSong?.artist || artistName;
+        const bestWork = await findBestWorkByTitle(titleSource.trim());
         if (!bestWork?.id) return;
         setIsLoadingVersions(true);
-        const excluded = new Set([normalize(artistName)]);
+        const excluded = new Set([normalize(artistSource)]);
         if (verdict === "not original") {
             (originalInfo?.artists || []).forEach((artist) =>
                 excluded.add(normalize(artist))
@@ -236,7 +261,7 @@ export default function Home() {
 
     return (
         <div>
-            {!isAuthenticated ? <BrandHeader /> : <h1>Home</h1>}
+            {!isAuthenticated ? <BrandHeader /> : <h3>Zoek een nummer én artiest en kijk of jij het origineel in gedachten had!</h3>}
             {isAuthenticated ? (
                 <SearchForm
                     songTitle={songTitle}
@@ -247,7 +272,16 @@ export default function Home() {
                     isRunning={isRunning}
                 />
             ) : (
-                <p>Log in om te zoeken naar songs.</p>
+                <p className="home-welcome-text">Nooit meer discussies over de oorsprong van een liedje!<br /><br />
+                    <span className="highlight-word">TrackBack</span> laat je zien wat het origineel is!
+                    <br /><br />
+                    <span className="home-welcome-line">
+                        🎶 <Link to="/login">Log in</Link> of{" "}
+                        <Link to="/register">registreer</Link> om te beginnen 🎶
+                    </span>
+
+                </p>
+
             )}
             <VerdictSection
                 verdict={verdict}
@@ -263,7 +297,7 @@ export default function Home() {
                 showVersions={showVersions}
                 onToggle={() => setShowVersions((value) => !value)}
             />
-            {isLoadingVersions ? <p>Checking for other versions...</p> : null}
+            {isLoadingVersions ? <p>Andere versies zoeken...</p> : null}
             <VersionsList
                 show={showVersions}
                 otherVersions={otherVersions}

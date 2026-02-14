@@ -1,0 +1,71 @@
+.verdict-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+}
+
+.verdict-card {
+    width: 360px;
+    max-width: 100%;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 12px;
+    background: var(--color-verdict-card-bg);
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+.verdict-card__text {
+    margin: 0;
+    color: var(--color-text-dark);
+    font-weight: var(--font-weight-bold);
+}
+
+.verdict-card__emphasis {
+    color: var(--color-text-warning);
+    font-weight: var(--font-weight-bold);
+}
+
+.verdict-cards {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.verdict-cards__item {
+    flex: 0 1 360px;
+}
+
+.verdict-cards__label {
+    margin: 0 0 var(--space-2);
+}
+
+.verdict-cards__label--original {
+    font-weight: var(--font-weight-bold);
+}
+
+.verdict-save-text {
+    max-width: 444px;
+    margin: 0 auto var(--space-2);
+    text-align: center;
+    color: var(--color-text-logo-header);
+}
+
+.verdict-save-button:not(:disabled):hover,
+.verdict-save-button:not(:disabled):focus-visible {
+    color: var(--color-text-page-hover);
+    border-color: var(--color-text-page-hover);
+}
+
+.versions-toggle-button:not(:disabled):hover,
+.versions-toggle-button:not(:disabled):focus-visible {
+    color: var(--color-text-page-hover);
+    border-color: var(--color-text-page-hover);
+}
+
+.versions-text {
+    color: var(--color-text-logo-header);
+}

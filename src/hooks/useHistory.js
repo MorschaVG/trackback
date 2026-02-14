@@ -19,7 +19,7 @@ export function useHistory(userId, token) {
                 }
             } catch {
                 if (isMounted) {
-                    setError("Could not load history.");
+                    setError("Geschiedenis laden mislukt.");
                 }
             } finally {
                 if (isMounted) {

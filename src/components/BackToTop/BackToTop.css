@@ -1,0 +1,15 @@
+.back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 90px;
+    z-index: 30;
+    color: var(--color-text-logo-header);
+    border-color: var(--color-text-logo-header);
+    background: var(--color-surface, transparent);
+}
+
+.back-to-top:hover,
+.back-to-top:focus-visible {
+    color: var(--color-text-link);
+    border-color: var(--color-text-link);
+}

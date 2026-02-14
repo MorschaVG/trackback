@@ -25,7 +25,7 @@ export default function Favorites() {
             await deleteFavoriteById(itemId, token);
             setItems((current) => current.filter((item) => item.id !== itemId));
         } catch {
-            setActionError("Could not remove favorite.");
+            setActionError("Favoriet verwijderen mislukt.");
         } finally {
             setPendingDeleteId(null);
         }
@@ -46,11 +46,11 @@ export default function Favorites() {
     return (
         <section>
             <h1>Favorites</h1>
-            {isLoading ? <p>Loading favorites...</p> : null}
+            {isLoading ? <p>Favorieten laden...</p> : null}
             {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
             {actionError ? <p style={{ color: "crimson" }}>{actionError}</p> : null}
             {!isLoading && !error && items.length === 0 ? (
-                <p>No favorites yet.</p>
+                <p>Je hebt nog geen favorieten.</p>
             ) : null}
             <ul className="song-card-list">
                 {items.map((item) => (

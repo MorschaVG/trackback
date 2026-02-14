@@ -19,11 +19,11 @@ export default function Register() {
 
         const trimmedEmail = email.trim();
         if (!trimmedEmail || !password) {
-            setError("Email and password are required.");
+            setError("Email en wachtwoord zijn verplicht.");
             return;
         }
         if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError("Wachtwoorden komen niet overeen.");
             return;
         }
 
@@ -32,7 +32,7 @@ export default function Register() {
             await registerUser({ email: trimmedEmail, password });
             navigate("/login", { replace: true });
         } catch {
-            setError("Registration failed. Try a different email.");
+            setError("Registreren mislukt. Probeer een andere email.");
         } finally {
             setIsSubmitting(false);
         }

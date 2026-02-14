@@ -1,4 +1,4 @@
-import logoPrimary from "../../assets/logo-primary-color.svg";
+import logoPrimary from "../../assets/logo-primary-color.png";
 import "./BrandHeader.css";
 
 function buildClassName(...values) {
