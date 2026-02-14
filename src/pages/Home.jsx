@@ -4,6 +4,7 @@ import SearchForm from "../components/Home/SearchForm";
 import VerdictSection from "../components/Home/VerdictSection";
 import VersionsPrompt from "../components/Home/VersionsPrompt";
 import VersionsList from "../components/Home/VersionsList";
+import BrandHeader from "../components/BrandHeader/BrandHeader.jsx";
 import "./Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import {
@@ -235,7 +236,7 @@ export default function Home() {
 
     return (
         <div>
-            <h1>Home</h1>
+            {!isAuthenticated ? <BrandHeader /> : <h1>Home</h1>}
             {isAuthenticated ? (
                 <SearchForm
                     songTitle={songTitle}

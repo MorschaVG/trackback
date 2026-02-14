@@ -105,7 +105,7 @@ https://www.figma.com/design/7UAbUWlFT1dmeoCFEfX9rl/Trackback?node-id=4-2&t=dbhA
     /* Brand / interactive */
     --color-primary:        var(--primary-500);
     --color-primary-hover:  var(--primary-600);
-    --color-primary-active: var(--primary-700);
+    --color-primary-active: var(--primary-800);
     --color-primary-soft:   var(--primary-100);
 
     /* Status (kies gerust andere mapping als je app het anders gebruikt) */

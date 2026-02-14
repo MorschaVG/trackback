@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
+import logoNav from "../../assets/logo-nav.png";
 import "./Navbar.css";
 
 function segmentClassName({ isActive }) {
@@ -15,6 +16,7 @@ export default function NavBar() {
                 `${segmentClassName({ isActive })} nav-pill__segment--left`
             }
             >
+                <img src={logoNav} alt="" aria-hidden="true" className="nav-pill__brand-logo" />
                 Home
             </NavLink>
 

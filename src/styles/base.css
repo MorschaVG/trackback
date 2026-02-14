@@ -2,6 +2,8 @@
 body {
     font-family: var(--font-family-body);
     font-weight: var(--font-weight-regular);
+    background: var(--color-bg);
+    color: var(--color-text);
 }
 
 h1,
