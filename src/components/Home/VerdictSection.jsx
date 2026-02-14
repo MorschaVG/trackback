@@ -30,10 +30,10 @@ export default function VerdictSection({
         <div className="verdict-section">
             <div className="verdict-card">
                 {verdict === "original" ? (
-                    <p className="verdict-card__text">Dit is het origineel!</p>
+                    <p className="verdict-card__text">Dit was het origineel</p>
                 ) : (
                     <p className="verdict-card__text">
-                        Dit is <span className="verdict-card__emphasis">NIET</span> het origineel!
+                        Dit was <span className="verdict-card__emphasis verdict-card__emphasis--underline">niet</span> het origineel
                     </p>
                 )}
             </div>

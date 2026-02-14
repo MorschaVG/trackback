@@ -4,9 +4,11 @@ import { deleteHistoryById } from "../services/noviApiService.js";
 import { useEffect, useState } from "react";
 import { formatUtcRfc2822NoSecondsNoZone } from "../helpers/formatDate.js";
 import SongCard from "../components/SongCard/SongCard.jsx";
+import { Pillbox } from "../components/Pillbox/Pillbox.jsx";
 import { useNavigate } from "react-router-dom";
+import "./History.css";
 
-export default function History() {
+export default function History({ showHeader = true, showActions = true }) {
     const { user, token } = useAuth();
     const navigate = useNavigate();
     const { history, isLoading, error } = useHistory(user?.userId, token);
@@ -46,21 +48,27 @@ export default function History() {
 
     return (
         <section>
-            <h1>History</h1>
-            <button
-                type="button"
-                onClick={handleClearHistory}
-                disabled={isLoading || isClearing || items.length === 0}
-            >
-                {isClearing ? "Clearing..." : "Clear history"}
-            </button>
+            {showHeader ? <h1>History</h1> : null}
+            {showActions ? (
+                <Pillbox
+                    as="button"
+                    type="button"
+                    onClick={handleClearHistory}
+                    disabled={isLoading || isClearing || items.length === 0}
+                    size="small"
+                    width={167}
+                    className="versions-button"
+                >
+                    {isClearing ? "Wissen..." : "Geschiedenis wissen"}
+                </Pillbox>
+            ) : null}
             {isLoading ? <p>Geschiedenis laden...</p> : null}
             {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
             {actionError ? <p style={{ color: "crimson" }}>{actionError}</p> : null}
             {!isLoading && !error && items.length === 0 ? (
                 <p>Je hebt nog geen geschiedenis.</p>
             ) : null}
-            <ul className="song-card-list">
+            <ul className="history-list">
                 {items.map((item) => (
                     <li key={item.id}>
                         <SongCard

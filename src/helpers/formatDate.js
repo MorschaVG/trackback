@@ -10,13 +10,9 @@ export function formatUtcRfc2822NoSecondsNoZone(value) {
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return String(value);
 
-    const weekday = WEEKDAYS[date.getUTCDay()];
     const day = pad2(date.getUTCDate());
     const month = MONTHS[date.getUTCMonth()];
     const year = date.getUTCFullYear();
-    const hour = pad2(date.getUTCHours());
-    const minute = pad2(date.getUTCMinutes());
 
-    return `${weekday}, ${day} ${month} ${year} ${hour}:${minute}`;
+    return `${day} ${month} ${year}`;
 }
-

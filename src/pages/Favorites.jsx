@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { formatUtcRfc2822NoSecondsNoZone } from "../helpers/formatDate.js";
 import SongCard from "../components/SongCard/SongCard.jsx";
 import { useNavigate } from "react-router-dom";
+import trashIcon from "../assets/trash-bin-icon-flat-by-Vexels.png";
+import "./Favorites.css";
 
 export default function Favorites() {
     const { user, token } = useAuth();
@@ -45,14 +47,17 @@ export default function Favorites() {
 
     return (
         <section>
-            <h1>Favorites</h1>
+            <p className="favorites-intro">Jouw opgeslagen zoekopdrachten:</p>
+            <p className="favorites-tip">
+                <span className="favorites-tip__label">Tip:</span> Klik op de titel van een opgeslagen zoekopdracht om die opnieuw te activeren. Dan kun je ook weer de andere versies bekijken!
+            </p>
             {isLoading ? <p>Favorieten laden...</p> : null}
             {error ? <p style={{ color: "crimson" }}>{error}</p> : null}
             {actionError ? <p style={{ color: "crimson" }}>{actionError}</p> : null}
             {!isLoading && !error && items.length === 0 ? (
                 <p>Je hebt nog geen favorieten.</p>
             ) : null}
-            <ul className="song-card-list">
+            <ul className="favorites-list">
                 {items.map((item) => (
                     <li key={item.id}>
                         <SongCard
@@ -68,8 +73,15 @@ export default function Favorites() {
                                     type="button"
                                     onClick={() => handleRemove(item.id)}
                                     disabled={pendingDeleteId === item.id}
+                                    aria-label="Verwijderen"
+                                    className="song-card__icon-button"
                                 >
-                                    {pendingDeleteId === item.id ? "Removing..." : "Remove"}
+                                    <img
+                                        className="song-card__icon"
+                                        src={trashIcon}
+                                        alt=""
+                                        aria-hidden="true"
+                                    />
                                 </button>
                             }
                         />

@@ -27,6 +27,10 @@
     font-weight: var(--font-weight-bold);
 }
 
+.verdict-card__emphasis--underline {
+    text-decoration: underline;
+}
+
 .verdict-cards {
     display: flex;
     justify-content: center;
