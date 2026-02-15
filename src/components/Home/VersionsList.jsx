@@ -23,7 +23,7 @@ export default function VersionsList({
                 width={167}
                 className="versions-button"
             >
-                {excludeLiveOrRemix ? "Include live/remix" : "Exclude live/remix"}
+                {excludeLiveOrRemix ? "Toon live/remixes" : "Zonder live/remixes"}
             </Pillbox>
             <ul className="versions-list">
                 {otherVersions.map((version) => (

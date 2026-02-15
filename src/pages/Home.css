@@ -73,3 +73,7 @@
   color: var(--color-text-logo-header);
   font-weight: var(--font-weight-bold);
 }
+
+.not-found {
+color: var(--color-text-warning);
+}
