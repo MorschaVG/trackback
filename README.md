@@ -89,7 +89,7 @@ test a piece of functionality that allows the user to click on the favorite and 
 
 ## Test Cases
 
-If you want to test the main functionality but don't know any songs (or can't google a list...) Here some options:
+If you want to test the main functionality but don't know any songs (or can't google a list...) Here are some options:
 
 - *The man who sold the world* by **Nirvana** (original by: **David Bowie**)
 - *I will always love you* by **Whitney Houston** (original by: **Dolly Parton**)
