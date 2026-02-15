@@ -1,6 +1,6 @@
 # TrackBack
 Frontend application for exploring track versions and identifying original releases.<br><br>
-🔗 GitHub Repository: https://github.com/MorschaVG/trackback
+GitHub Repository: https://github.com/MorschaVG/trackback
 <p>
   <img src="docs/screenshots/01-home.png" width="800"><br>
   <em>Trackback pre-login homepage</em>
