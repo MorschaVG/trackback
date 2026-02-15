@@ -62,7 +62,6 @@
 .verdict-save-button:not(:disabled):focus-visible {
     color: var(--color-text-page-hover);
     border-color: var(--color-text-page-hover);
-}
 
 .versions-toggle-button:not(:disabled):hover,
 .versions-toggle-button:not(:disabled):focus-visible {

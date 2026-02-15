@@ -20,7 +20,10 @@ export default function SongCard({
     const artistText = artist?.trim() ? artist : "Unknown artist";
     const titleText = title?.trim() ? title : "Unknown title";
     const yearText = formatYear(year);
-    const verdictText = typeof verdict === "string" ? verdict.trim() : "";
+    const verdictText =
+        typeof verdict === "string"
+            ? verdict.trim().replace(/_/g, " ").toLowerCase()
+            : "";
     const timestampText = typeof timestamp === "string" ? timestamp.trim() : "";
     const resolvedSelectLabel =
         selectLabel || `Search for ${titleText} by ${artistText} again`;
