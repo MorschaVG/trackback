@@ -98,9 +98,3 @@
   object-fit: contain;
 }
 
-@media (prefers-color-scheme: light) {
-  .song-card {
-    border-color: var(--color-border-strong);
-    background: var(--color-song-card-bg);
-  }
-}
